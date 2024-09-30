@@ -35,9 +35,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Set the Kubernetes context
-        uses: azure/k8s-set-context@v2
+      - name: Up docker-compose in VPS
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          method: service-account
-          k8s-url: http://dino-misis.ru:8443
-          k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: whoami

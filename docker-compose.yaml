@@ -1,0 +1,8 @@
+version: "3.3"
+
+services:
+  backend:
+    build:
+      context: backend/app-python/
+    image: avalanche05/app-python:latest
+    restart: always
