@@ -4,5 +4,7 @@ services:
   backend:
     build:
       context: backend/app-python/
-    image: avalanche05/app-python:latest
+    image: ghcr.io/avalanche05/app-python:${APP_TAG:-local}
     restart: always
+    ports:
+      - 8181:8000

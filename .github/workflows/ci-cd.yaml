@@ -41,4 +41,9 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: whoami
+          script: |
+            cd t1
+            git pull
+            sudo docker pull ghcr.io/avalanche05/app-python:latest
+            sudo docker compose down
+            APP_TAG=latest sudo docker compose up -d
