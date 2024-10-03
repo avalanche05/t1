@@ -16,12 +16,12 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
 
-    PROJECT_NAME: str = "Hack"
-    POSTGRES_SERVER: str = ""
-    POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str = ""
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = ""
+    PROJECT_NAME: str
+    POSTGRES_SERVER: str
+    POSTGRES_PORT: int
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str 
+    POSTGRES_DB: str
 
     @computed_field  # type: ignore[prop-decorator]
     @property

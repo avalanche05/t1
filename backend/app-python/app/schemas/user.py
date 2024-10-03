@@ -1,4 +1,4 @@
-from app.models.common import BaseSchema
+from app.common import BaseSchema
 from .item import Item
 class User(BaseSchema):
     name: str

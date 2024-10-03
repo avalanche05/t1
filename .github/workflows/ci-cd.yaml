@@ -20,6 +20,11 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY_TOKEN }} 
       - uses: actions/checkout@v4
+      - name: Make app-python env
+        env:
+          ENV: ${{ secrets.ENV }}
+        run: |
+          echo "$env" > ./backend/app-python/.env
       - name: Build and push the app-python Docker image
         uses: docker/build-push-action@v6
         with:
