@@ -26,7 +26,7 @@ jobs:
           FRONT_ENV: ${{ secrets.FRONT_ENV }}
         run: |
           echo "$env" > ./backend/app-python/.env
-          echo "VITE_API_URL=test.api.misis.tech" > ./frontend/.env
+          echo "$FRONT_ENV" > ./frontend/.env
       - name: Build and push the app-python Docker image
         uses: docker/build-push-action@v6
         with:
@@ -62,5 +62,6 @@ jobs:
             cd t1
             git pull
             sudo docker pull ghcr.io/avalanche05/app-python:latest
+            sudo docker pull ghcr.io/avalanche05/t1-frontend:latest
             sudo docker compose down
             APP_TAG=latest sudo docker compose up -d
