@@ -8,21 +8,22 @@ on:
 jobs:
   deploy:
     name: Deploy
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Up docker-compose in VPS
         uses: appleboy/ssh-action@v1.0.3
         env:
-          ENV: ${{ secrets.ENV }}
+          BACK_ENV: ${{ secrets.ENV }}
           FRONT_ENV: ${{ secrets.FRONT_ENV }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
+          envs: BACK_ENV,FRONT_ENV
           script: |
             cd t1
-            git pull
-            echo "$env" > ./backend/app-python/.env
+            git fetch origin
+            git reset --hard origin/main
+            echo "$BACK_ENV" > ./backend/app-python/.env
             echo "$FRONT_ENV" > ./frontend/.env
             sudo docker compose up --build -d
