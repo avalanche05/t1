@@ -23,8 +23,10 @@ jobs:
       - name: Make app-python env
         env:
           ENV: ${{ secrets.ENV }}
+          FRONT_ENV: ${{ secrets.FRONT_ENV }}
         run: |
           echo "$env" > ./backend/app-python/.env
+          echo "$FRONT_ENV" > ./frontend/.env
       - name: Build and push the app-python Docker image
         uses: docker/build-push-action@v6
         with:
@@ -35,12 +37,6 @@ jobs:
             ghcr.io/avalanche05/app-python:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Make t1-frontend env
-        env:
-          FRONT_ENV: ${{ secrets.FRONT_ENV }}
-        run: |
-          echo "$FRONT_ENV" > ./frontend/.env
-          cat ./frontend/.env
       - name: Build and push the t1-frontend Docker image
         uses: docker/build-push-action@v6
         with:
