@@ -1,12 +1,8 @@
 import secrets
 
-from pydantic import (
-    PostgresDsn,
-    computed_field,
-)
+from pydantic import PostgresDsn, computed_field
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 
 class Settings(BaseSettings):
@@ -20,7 +16,7 @@ class Settings(BaseSettings):
     POSTGRES_SERVER: str
     POSTGRES_PORT: int
     POSTGRES_USER: str
-    POSTGRES_PASSWORD: str 
+    POSTGRES_PASSWORD: str
     POSTGRES_DB: str
 
     @computed_field  # type: ignore[prop-decorator]
@@ -34,9 +30,6 @@ class Settings(BaseSettings):
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
         )
-
-
-
 
 
 settings = Settings()  # type: ignore

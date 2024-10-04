@@ -1,5 +1,4 @@
-from app import models
-from app import schemas
+from app import models, schemas
 
 
 def get_user(db_user: models.User) -> schemas.User:

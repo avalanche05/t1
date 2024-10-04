@@ -1,9 +1,12 @@
 from fastapi import APIRouter
+
 from app.api.deps import SessionDep
-from app.schemas import Login, LoginResponse
 from app.crud import auth
+from app.schemas import Login, LoginResponse
 
 router = APIRouter()
+
+
 @router.post("/login/")
 async def login(login: Login, session: SessionDep) -> LoginResponse:
     db_user = auth.login(
@@ -17,4 +20,3 @@ async def login(login: Login, session: SessionDep) -> LoginResponse:
         token=db_token.token,
         roles=[db_user.role],
     )
-    
