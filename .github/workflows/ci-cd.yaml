@@ -26,7 +26,7 @@ jobs:
           FRONT_ENV: ${{ secrets.FRONT_ENV }}
         run: |
           echo "$env" > ./backend/app-python/.env
-          echo "$FRONT_ENV" > ./frontend/.env
+          echo "VITE_API_URL=test.api.misis.tech" > ./frontend/.env
       - name: Build and push the app-python Docker image
         uses: docker/build-push-action@v6
         with:
