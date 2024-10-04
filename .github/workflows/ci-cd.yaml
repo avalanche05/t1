@@ -35,6 +35,21 @@ jobs:
             ghcr.io/avalanche05/app-python:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Make t1-frontend env
+        env:
+          ENV: ${{ secrets.FRONT_ENV }}
+        run: |
+          echo "$env" > ./frontend/.env
+      - name: Build and push the t1-frontend Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ghcr.io/avalanche05/t1-frontend:latest
+            ghcr.io/avalanche05/t1-frontend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
   deploy:
     name: Deploy
     needs: build

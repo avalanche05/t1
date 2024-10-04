@@ -9,6 +9,7 @@ services:
     ports:
       - 8181:8000
   frontend:
+    image: ghcr.io/avalanche05/t1-frontend:${APP_TAG:-local}
     build:
         context: ./frontend
         dockerfile: Dockerfile
