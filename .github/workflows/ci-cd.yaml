@@ -37,9 +37,10 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Make t1-frontend env
         env:
-          ENV: ${{ secrets.FRONT_ENV }}
+          FRONT_ENV: ${{ secrets.FRONT_ENV }}
         run: |
-          echo "$env" > ./frontend/.env
+          echo "$FRONT_ENV" > ./frontend/.env
+          cat ./frontend/.env
       - name: Build and push the t1-frontend Docker image
         uses: docker/build-push-action@v6
         with:
