@@ -4,7 +4,14 @@ services:
   backend:
     build:
       context: backend/app-python/
-    image: ghcr.io/avalanche05/app-python:${APP_TAG:-local}
     restart: always
     ports:
       - 8181:8000
+  frontend:
+    build:
+        context: ./frontend
+        dockerfile: Dockerfile
+    container_name: frontend
+    restart: always
+    ports:
+        - "3000:3000"
