@@ -29,7 +29,7 @@ def get_all(
 
     return query.all()
 
-def create(session: Session, candidate: dict, resume_link: str) -> Candidate:
+def create(session: Session, candidate: dict, resume_link: str, is_cold: bool = True) -> Candidate:
      db_candidate = Candidate(
                     name=candidate["name"],
                     phone=candidate["phone"],
@@ -42,7 +42,7 @@ def create(session: Session, candidate: dict, resume_link: str) -> Candidate:
                     speciality=candidate["speciality"],
                     education=candidate["education"],
                     summary=candidate["summary"],
-                    is_cold=candidate["is_cold"],
+                    is_cold=is_cold,
                     resume_link=resume_link,
                     city=candidate["city"],
                     work_format=candidate["work_format"],
