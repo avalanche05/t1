@@ -13,7 +13,7 @@ class Candidate(BaseSchema):
     phone: str
     email: str
     contacts: str
-    skills: str
+    skills: list[str]
     experience: float
     position: Position
     grade: str
@@ -22,3 +22,5 @@ class Candidate(BaseSchema):
     summary: str
     is_cold: bool
     resume_link: str
+    city: str
+    work_format: str

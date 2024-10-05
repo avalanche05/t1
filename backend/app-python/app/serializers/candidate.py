@@ -17,6 +17,8 @@ def get_candidate(db_candidate: models.Candidate) -> schemas.Candidate:
         summary=db_candidate.summary,
         is_cold=db_candidate.is_cold,
         resume_link=db_candidate.resume_link,
+        city=db_candidate.city,
+        work_format=db_candidate.work_format
     )
 
 
