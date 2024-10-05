@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import or_, not_
 
 from app import schemas
-from app.models import Candidate, Vacancy
+from app.models import Application, Candidate, Vacancy
 
 
 def create(session: Session, vacancy: schemas.VacancyCreate) -> Vacancy:
@@ -39,4 +40,13 @@ def get_all(
 
 
 def get_vacancy_cold_candidates(session: Session, vacancy_id: int) -> list[Candidate]:
-    return session.query(Candidate).filter(Candidate.is_cold == True).all()
+    query = (
+        session.query(Candidate)
+        .filter(
+            or_(
+                Candidate.is_cold == True,
+                not_(Candidate.applications.any(Application.vacancy_id == vacancy_id))
+            )
+        )
+    )
+    return query.all()

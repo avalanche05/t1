@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Path
 from starlette import status
 
 from app import models, schemas, serializers
@@ -45,3 +45,20 @@ async def create_vacancy(
     )
 
     return serializers.get_vacancy(db_vacancy)
+
+
+@router.get(
+    "/vacancies/{vacancy_id}/cold-candidates",
+    status_code=status.HTTP_200_OK,
+    response_model=list[schemas.Candidate]
+)
+async def get_cold_candidates_by_vacancy_id(
+        session: SessionDep,
+        vacancy_id: int = Path(...)
+):
+    db_cold_candidates = vacancy.get_vacancy_cold_candidates(
+        session=session,
+        vacancy_id=vacancy_id
+    )
+
+    return serializers.get_candidates(db_cold_candidates)

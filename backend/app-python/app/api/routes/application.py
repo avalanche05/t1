@@ -17,7 +17,7 @@ async def get_applications(
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
-    vacancyId: str | None = None,
+    vacancy_id: str | None = None,
     status: str | None = None,
 ):
     db_applications = application.get_all(
@@ -25,7 +25,7 @@ async def get_applications(
         position=position,
         grade=grade,
         speciality=speciality,
-        vacancyId=vacancyId,
+        vacancy_id=vacancy_id,
         status=status
     )
 

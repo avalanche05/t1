@@ -43,10 +43,10 @@ def get_all(
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
-    vacancyId: int | None = None,
+    vacancy_id: int | None = None,
     status: str | None = None,
 ) -> list[Application]:
-    query = session.query(Application)
+    query = session.query(Application).join(Application.candidate)
 
     if position is not None:
         query = query.filter(Application.candidate.position == position)
@@ -54,8 +54,8 @@ def get_all(
         query = query.filter(Application.candidate.grade == grade)
     if speciality is not None:
         query = query.filter(Application.candidate.speciality == speciality)
-    if vacancyId is not None:
-        query = query.filter(Application.vacancy_id == vacancyId)
+    if vacancy_id is not None:
+        query = query.filter(Application.vacancy_id == vacancy_id)
     if status is not None:
         query = query.filter(Application.status == status)
 
