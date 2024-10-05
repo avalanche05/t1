@@ -19,5 +19,5 @@ class Application(BaseSchema):
     id: int
     vacancy: Vacancy
     candidate: Candidate
-    status: Literal["hrAccepted", "hrDeclined", "interview", "interviewerAccepted", "interviewerDeclined", "offer", "candidateAccepted", "candidateDeclined"] = "pending"
+    status: Literal["pending", "hrAccepted", "hrDeclined", "interview", "interviewerAccepted", "interviewerDeclined", "offer", "candidateAccepted", "candidateDeclined"] = "pending"
     created_at: datetime
