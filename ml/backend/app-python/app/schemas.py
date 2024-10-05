@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing import Literal
+from datetime import datetime
 
 class ResumeProcess(BaseModel):
     file_key: str
@@ -21,3 +23,46 @@ class Candidate(BaseModel):
 
 class ResumeProcessResponse(BaseModel):
     candidate: Candidate
+
+class Folder(BaseModel):
+    id: int
+    name: str
+    candidates_count: int
+
+class Candidate(BaseModel):
+    id: int
+    name: str
+    phone: str
+    email: str
+    contacts: str
+    skills: list[str]
+    experience: float
+    position: str
+    grade: Literal["junior", "middle", "senior"]
+    speciality: str
+    education: str
+    summary: str
+    is_cold: bool
+    resume_link: str
+    city: str
+    work_format: Literal["online", "hybrid", "offline"]
+    folders: list[Folder]
+
+class Vacancy(BaseModel):
+    id: int
+    position: str
+    grade: Literal["junior", "middle", "senior"]
+    speciality: str
+    description: str
+    team: str
+    city: str
+    work_format: Literal["online", "hybrid", "offline"]
+    created_at: datetime
+
+class FeedbackRequest(BaseModel):
+    action: Literal["invite", "reject", "rotate"]
+    candidate: Candidate
+    vacancy: Vacancy
+
+class Feedback(BaseModel):
+    message: str
