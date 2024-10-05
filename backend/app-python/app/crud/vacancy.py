@@ -12,6 +12,8 @@ def create(session: Session, vacancy: schemas.VacancyCreate) -> Vacancy:
         speciality=vacancy.speciality,
         description=vacancy.description,
         team=vacancy.team,
+        city=vacancy.city,
+        work_format=vacancy.work_format
     )
 
     session.add(db_vacancy)
@@ -26,6 +28,8 @@ def get_all(
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
+    city: str | None = None,
+    work_format: str | None = None
 ) -> list[Vacancy]:
     query = session.query(Vacancy)
 
@@ -35,6 +39,10 @@ def get_all(
         query = query.filter(Vacancy.grade == grade)
     if speciality is not None:
         query = query.filter(Vacancy.speciality == speciality)
+    if city is not None:
+        query = query.filter(Candidate.city == city)
+    if work_format is not None:
+        query = query.filter(Candidate.work_format == work_format)
 
     return query.all()
 

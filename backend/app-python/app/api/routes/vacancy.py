@@ -19,12 +19,16 @@ async def get_vacancies(
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
+    city: str | None = None,
+    work_format: str | None = None
 ):
     db_vacancies = vacancy.get_all(
         session=session,
         position=position,
         grade=grade,
         speciality=speciality,
+        city=city,
+        work_format=work_format
     )
 
     return serializers.get_vacancies(db_vacancies)
