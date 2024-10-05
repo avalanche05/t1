@@ -1,17 +1,16 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Body, HTTPException, Depends
 
-from app.api.deps import SessionDep
-from app.crud import auth
-from app.schemas import Login, LoginResponse
-from app.serializers.user import get_user
+from app.api.deps import SessionDep, get_current_user
+from app.crud import auth, user
+from app import schemas, serializers, models
 
 router = APIRouter()
 
 
-@router.post("/login")
-async def login(login: Login, session: SessionDep) -> LoginResponse:
+@router.post("/login/")
+async def login(login: schemas.Login, session: SessionDep) -> schemas.LoginResponse:
     db_user = auth.login(
         session=session,
         username=login.username,
@@ -19,7 +18,25 @@ async def login(login: Login, session: SessionDep) -> LoginResponse:
     )
 
     db_token = auth.create_token(session=session, user_id=db_user.id)
-    return LoginResponse(
+    return schemas.LoginResponse(
         token=db_token.token,
-        user=get_user(db_user),
+        user=serializers.get_user(db_user),
     )
+
+
+@router.post("/register")
+def register_user(
+    session: SessionDep,
+    user_instance: schemas.UserCreateRequest = Body(...),
+) -> schemas.Token:
+    try:
+        db_user = user.create(
+            session=session,
+            user=user_instance)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    db_token = auth.create_token(
+        session=session,
+        user_id=db_user.id)
+
+    return serializers.get_token(db_token)
