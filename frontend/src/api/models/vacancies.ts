@@ -7,3 +7,7 @@ export interface Vacancy {
     team: string;
     createdAt: string;
 }
+
+export interface FetchVacancyColdCandidatesParams {
+    vacancyId: number;
+}

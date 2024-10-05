@@ -53,7 +53,7 @@ const CandidateDetails = ({ candidate }: Props) => {
                     <div className='flex items-center space-x-2'>
                         <FileText className='w-5 h-5 text-muted-foreground' />
                         <a
-                            href={candidate.resumeLink}
+                            href={candidate.resume_link}
                             target='_blank'
                             rel='noopener noreferrer'
                             className='text-blue-500 hover:underline'
