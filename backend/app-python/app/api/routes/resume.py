@@ -20,7 +20,7 @@ router = APIRouter()
 
 
 class ResumeProcessorThread(threading.Thread):
-    def __init__(self, session_id: str, files: list[str], db_session):
+    def __init__(self, session_id: str, files: list[str], db_session, s3_client):
         threading.Thread.__init__(self)
         self.session_id = session_id
         self.files = files
@@ -29,6 +29,7 @@ class ResumeProcessorThread(threading.Thread):
         self._processed_files = {}
         self._db_session = db_session
         self.all_files = copy.copy(files)
+        self._s3_client = s3_client
 
         for file_key in files:
             self._files_queue.put(file_key)
@@ -52,8 +53,15 @@ class ResumeProcessorThread(threading.Thread):
                 continue
             candidate = response.json()["candidate"]
             with self.lock:
+
+                resume_link = self._s3_client.generate_presigned_url(
+                    "get_object",
+                    Params={"Bucket": "hack-s3", "Key": file_key},
+                    ExpiresIn=7 * 86400,
+                )
+
                 db_candidate = crud.candidate.create(
-                    self._db_session, candidate, resume_link=file_key
+                    self._db_session, candidate, resume_link=resume_link
                 )
 
             with self.lock:
@@ -93,6 +101,7 @@ async def upload_resume(
         session_id=session_id,
         files=succes_files,
         db_session=db_session,
+        s3_client=s3_client,
     )
 
     resume_processor.start()
