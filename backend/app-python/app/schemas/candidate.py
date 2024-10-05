@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Literal
 
 from app.common import BaseSchema
 from app.schemas.folder import Folder
@@ -17,12 +18,12 @@ class Candidate(BaseSchema):
     skills: list[str]
     experience: float
     position: str
-    grade: str
+    grade: Literal["junior", "middle", "senior"]
     speciality: str
     education: str
     summary: str
     is_cold: bool
     resume_link: str
     city: str
-    work_format: str
+    work_format: Literal["online", "hybrid", "offline"]
     folders: list[Folder]
