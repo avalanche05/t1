@@ -18,8 +18,6 @@ async def process_resume(resume_process: ResumeProcess, s3_client: S3ClientDep) 
 
     data = file_to_json(f"data/{file_key}")
 
-    print(data)
-
     return ResumeProcessResponse(
         candidate=Candidate(
             name=data["name"],
