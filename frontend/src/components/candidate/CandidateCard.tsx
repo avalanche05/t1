@@ -9,6 +9,7 @@ import { Textarea } from '../ui/textarea';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { ChevronsUpDown } from 'lucide-react';
 import AddCandidateToFolderButton from '../AddCandidateToFolderButton';
+import { WorkScheduleLabels } from '@/models/IApplicationsFilter';
 
 type Props = {
     candidate: Candidate;
@@ -194,6 +195,30 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     </div>
                                 </div>
 
+                                <div className='grid grid-cols-3 gap-4'>
+                                    <div>
+                                        <p className='text-sm font-medium'>Город:</p>
+                                        <p>{candidate.city}</p>
+                                    </div>
+
+                                    <div>
+                                        <p className='text-sm font-medium'>График:</p>
+                                        <p>
+                                            {WorkScheduleLabels[candidate.work_schedule] ||
+                                                'Не заполнен'}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <p className='text-sm font-medium'>Папки:</p>
+                                        <p>
+                                            {candidate.folders
+                                                .map((folder) => folder.name)
+                                                .join(', ')}
+                                        </p>
+                                    </div>
+                                </div>
+
                                 <div className='grid grid-cols-1 gap-4'>
                                     <div>
                                         <p className='text-sm font-medium'>Краткая информация:</p>
@@ -212,8 +237,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                         Просмотреть резюме
                                     </a>
                                 </div>
-                            </div>
-                            <div className='w-full md:w-1/3 space-y-4'>
+
                                 {application && status && (
                                     <div className='space-y-2'>
                                         <p className='text-sm font-medium'>Хронология заявки:</p>
@@ -247,7 +271,8 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                         </div>
                                     </div>
                                 )}
-
+                            </div>
+                            <div className='w-full md:w-1/3 space-y-4'>
                                 <div className='space-y-2'>
                                     <Button
                                         onClick={() => {}}
