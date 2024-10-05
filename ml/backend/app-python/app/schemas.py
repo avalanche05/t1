@@ -16,8 +16,6 @@ class Candidate(BaseModel):
     speciality: str
     education: str
     summary: str
-    is_cold: bool
-    resume_link: str
     city: str
     work_format: str
 

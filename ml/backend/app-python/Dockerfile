@@ -2,9 +2,9 @@ FROM python:3.12.6-bookworm
 
 WORKDIR /app/
 
-COPY ./requirements.txt /app/
+RUN mkdir -p /app/data
 
-COPY .env /app/
+COPY ./requirements.txt /app/
 
 RUN pip install -r requirements.txt
 
