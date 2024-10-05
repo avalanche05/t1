@@ -15,4 +15,9 @@ class Role(str, Enum):
 
 class LoginResponse(BaseSchema):
     token: str
-    roles: list[Role]
+    user: "User"
+
+
+from .user import User
+
+LoginResponse.update_forward_refs()
