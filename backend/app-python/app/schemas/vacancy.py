@@ -12,4 +12,4 @@ class VacancyCreate(BaseSchema):
 
 
 class Vacancy(VacancyCreate):
-    createdAt: datetime
+    created_at: datetime

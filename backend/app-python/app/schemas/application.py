@@ -14,4 +14,4 @@ class Application(BaseSchema):
     vacancy: Vacancy
     candidate: Candidate
     status: str
-    createdAt: datetime
+    created_at: datetime

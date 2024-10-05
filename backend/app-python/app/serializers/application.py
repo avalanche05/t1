@@ -6,7 +6,7 @@ def get_application(db_application: models.Application) -> schemas.Application:
         vacancy=vacancy.get_vacancy(db_application.vacancy),
         candidate=candidate.get_candidate(db_application.candidate),
         status=db_application.status,
-        createdAt=db_application.createdAt,
+        created_at=db_application.created_at,
     )
 
 

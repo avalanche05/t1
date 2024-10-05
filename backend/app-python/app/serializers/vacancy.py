@@ -7,7 +7,7 @@ def get_vacancy(db_vacancy: models.Vacancy) -> schemas.Vacancy:
         speciality=db_vacancy.speciality,
         description=db_vacancy.description,
         team=db_vacancy.team,
-        createdAt=db_vacancy.created_at,
+        created_at=db_vacancy.created_at,
 
     )
 
