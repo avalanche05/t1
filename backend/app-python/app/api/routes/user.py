@@ -10,7 +10,7 @@ from app.serializers.user import get_user
 router = APIRouter()
 
 
-@router.post("/login/")
+@router.post("/login")
 async def login(login: Login, session: SessionDep) -> LoginResponse:
     db_user = auth.login(
         session=session,

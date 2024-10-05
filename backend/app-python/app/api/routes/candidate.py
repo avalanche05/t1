@@ -9,7 +9,7 @@ from app.crud import candidate
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 async def get_candidates(
     session: SessionDep,
     position: str | None = None,

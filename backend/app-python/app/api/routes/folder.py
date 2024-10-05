@@ -8,7 +8,7 @@ from app.crud import folder
 router = APIRouter()
 
 @router.post(
-    "/",
+    "",
     status_code=status.HTTP_201_CREATED,
     response_model=schemas.Folder
 )
@@ -25,7 +25,7 @@ async def create_folder(
 
 
 @router.post(
-    "/{folder_id}/",
+    "/{folder_id}",
     status_code=status.HTTP_201_CREATED,
     response_model=schemas.Folder
 )
@@ -44,7 +44,7 @@ async def add_candidate_to_folder(
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=list[schemas.Folder]
 )

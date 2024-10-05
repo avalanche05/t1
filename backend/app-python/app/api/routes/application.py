@@ -33,7 +33,7 @@ async def get_applications(
 
 
 @router.post(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=schemas.Application
 )
@@ -50,7 +50,7 @@ async def create_application(
 
 
 @router.post(
-    "/applications/{application_id}/status/",
+    "/applications/{application_id}/status",
     response_model=schemas.Application
 )
 async def update_application_status(

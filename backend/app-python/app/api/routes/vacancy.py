@@ -10,7 +10,7 @@ from app.crud import vacancy
 router = APIRouter()
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=list[schemas.Vacancy]
 )
@@ -35,7 +35,7 @@ async def get_vacancies(
 
 
 @router.post(
-    "/",
+    "",
     status_code=status.HTTP_201_CREATED,
     response_model=schemas.Vacancy
 )
@@ -52,7 +52,7 @@ async def create_vacancy(
 
 
 @router.get(
-    "/vacancies/{vacancy_id}/cold-candidates/",
+    "/vacancies/{vacancy_id}/cold-candidates",
     status_code=status.HTTP_200_OK,
     response_model=list[schemas.Candidate]
 )
