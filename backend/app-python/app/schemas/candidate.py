@@ -1,5 +1,11 @@
+from enum import Enum
+
 from app.common import BaseSchema
 
+
+class Position(str, Enum):
+    MANAGER = "manager"
+    DEVELOPER = "developer"
 
 class Candidate(BaseSchema):
     name: str
@@ -8,7 +14,7 @@ class Candidate(BaseSchema):
     contacts: str
     skills: str
     experience: float
-    position: str
+    position: Position
     grade: str
     speciality: str
     education: str
