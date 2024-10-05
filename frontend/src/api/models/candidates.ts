@@ -11,6 +11,6 @@ export interface Candidate {
     speciality: string;
     education: string;
     summary: string;
-    resumeLink: string;
-    isCold: boolean;
+    resume_link: string;
+    is_cold: boolean;
 }
