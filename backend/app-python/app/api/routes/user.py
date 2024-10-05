@@ -9,7 +9,7 @@ from app import schemas, serializers, models
 router = APIRouter()
 
 
-@router.post("/login/")
+@router.post("/login")
 async def login(login: schemas.Login, session: SessionDep) -> schemas.LoginResponse:
     db_user = auth.login(
         session=session,
