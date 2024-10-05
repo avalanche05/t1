@@ -1,4 +1,5 @@
 export * from './auth';
-export * from './cadidates';
+export * from './candidates';
 export * from './applications';
 export * from './vacancies';
+export * from './folders';

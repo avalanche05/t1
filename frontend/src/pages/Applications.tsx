@@ -1,92 +1,69 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Candidate } from '@/api/models/cadidates';
-import { Application, ApplicationStatuses } from '@/api/models';
+import { observer } from 'mobx-react-lite';
 import CandidateCard from '@/components/candidate/CandidateCard';
+import { useEffect } from 'react';
+import { useStores } from '@/hooks/useStores';
+import { toast } from '@/components/ui/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
+import ApplicationsFilter from '@/components/ApplicationsFilter';
 
-// Mock data with extended candidate information
-const mockApplications: Application[] = [
-    {
-        id: 1,
-        candidate: {
-            id: 1,
-            name: 'John Doe',
-            phone: '+1 (555) 123-4567',
-            email: 'john.doe@example.com',
-            contacts: 'LinkedIn: johndoe',
-            skills: ['JavaScript', 'React', 'Node.js'],
-            experience: 5,
-            position: 'Frontend Developer',
-            grade: 'Senior',
-            speciality: 'Frontend Developer',
-            education: 'BS in Computer Science',
-            resumeLink: 'https://example.com/johndoe_resume.pdf',
-            summary: 'summary',
-            isCold: false,
-        },
-        vacancy: {
-            id: 1,
-            position: 'string',
-            grade: 'string',
-            speciality: 'string',
-            description: 'string',
-            team: 'string',
-            createdAt: 'string',
-        },
-        status: ApplicationStatuses.CandidateAccepted,
-        createdAt: 'string',
-    },
-];
+const Applications = observer(() => {
+    const { rootStore } = useStores();
 
-const mockOtherCandidates: Candidate[] = [
-    {
-        id: 2,
-        name: 'John Doe',
-        phone: '+1 (555) 123-4567',
-        email: 'john.doe@example.com',
-        contacts: 'LinkedIn: johndoe',
-        skills: ['JavaScript', 'React', 'Node.js'],
-        experience: 5,
-        position: 'Frontend Developer',
-        grade: 'Senior',
-        speciality: 'Frontend Developer',
-        education: 'BS in Computer Science',
-        resumeLink: 'https://example.com/johndoe_resume.pdf',
-        summary: 'summary',
-        isCold: false,
-    },
-];
+    useEffect(() => {
+        rootStore.fetchApplications().catch(() => {
+            toast({
+                title: 'Ошибка',
+                description: 'Не удалось загрузить отклики',
+                variant: 'destructive',
+            });
+        });
 
-export default function Applications() {
+        rootStore.fetchFolders().catch(() => {
+            toast({
+                title: 'Ошибка',
+                description: 'Не удалось загрузить папки',
+                variant: 'destructive',
+            });
+        });
+    }, [rootStore]);
+
     return (
         <div className='container mx-auto p-4'>
-            <h1 className='text-2xl font-bold mb-4'>HR Monitor</h1>
+            <ApplicationsFilter />
 
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Отклики</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {mockApplications.map((application) => (
+            <Tabs defaultValue='applications' className='w-full'>
+                <TabsList className='grid w-full grid-cols-2'>
+                    <TabsTrigger value='applications'>Отклики</TabsTrigger>
+                    <TabsTrigger value='coldCandidates'>
+                        Подходящие кандидаты без отклика
+                    </TabsTrigger>
+                </TabsList>
+                <TabsContent value='applications'>
+                    {rootStore.isApplicationsLoading ? (
+                        <>
+                            {Array.from({ length: 5 }).map((_, index) => (
+                                <Skeleton key={index} className='h-40 w-full mt-5' />
+                            ))}
+                        </>
+                    ) : (
+                        rootStore.filteredApplications.map((application) => (
                             <CandidateCard
                                 key={application.candidate.id}
                                 candidate={application.candidate}
+                                application={application}
                             />
-                        ))}
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Другие кандидаты</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {mockOtherCandidates.map((candidate) => (
-                            <CandidateCard key={candidate.id} candidate={candidate} />
-                        ))}
-                    </CardContent>
-                </Card>
-            </div>
+                        ))
+                    )}
+                </TabsContent>
+                <TabsContent value='coldCandidates'>
+                    {rootStore.vacancyColdCandidates.map((candidate) => (
+                        <CandidateCard key={candidate.id} candidate={candidate} />
+                    ))}
+                </TabsContent>
+            </Tabs>
         </div>
     );
-}
+});
+
+export default Applications;
