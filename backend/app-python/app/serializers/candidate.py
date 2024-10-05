@@ -12,7 +12,7 @@ def get_candidate(db_candidate: models.Candidate) -> schemas.Candidate:
         skills=db_candidate.skills,
         experience=db_candidate.experience,
         position=db_candidate.position,
-        grade=db_candidate.grade,
+        grade=db_candidate.grade.lower(),
         speciality=db_candidate.speciality,
         education=db_candidate.education,
         summary=db_candidate.summary,
