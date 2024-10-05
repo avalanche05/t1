@@ -1,14 +1,12 @@
+from sqlalchemy import not_, or_
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, not_
 
 from app import schemas
-from app.models import Application, Candidate, Vacancy, Folder
+from app.models import Application, Candidate, Folder, Vacancy
 
 
 def create(session: Session, folder: schemas.FolderCreate) -> Folder:
-    db_folder = Folder(
-        name=folder.name
-    )
+    db_folder = Folder(name=folder.name)
     session.add(db_folder)
     session.commit()
     session.refresh(db_folder)
@@ -16,7 +14,9 @@ def create(session: Session, folder: schemas.FolderCreate) -> Folder:
     return db_folder
 
 
-def add_candidate_to_folder_by_id(session: Session, folder_id: int, candidate: schemas.CandidateFolderAdd) -> Folder:
+def add_candidate_to_folder_by_id(
+    session: Session, folder_id: int, candidate: schemas.CandidateFolderAdd
+) -> Folder:
     folder = session.get(Folder, folder_id)
     if folder is None:
         raise ValueError(f"Folder with ID {folder_id} not found.")

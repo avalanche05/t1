@@ -1,6 +1,7 @@
 from app import models, schemas
 from app.serializers import candidate, vacancy
 
+
 def get_application(db_application: models.Application) -> schemas.Application:
     return schemas.Application(
         id=db_application.id,
@@ -11,5 +12,7 @@ def get_application(db_application: models.Application) -> schemas.Application:
     )
 
 
-def get_applications(db_applications: list[models.Application]) -> list[schemas.Application]:
+def get_applications(
+    db_applications: list[models.Application],
+) -> list[schemas.Application]:
     return [get_application(db_application) for db_application in db_applications]

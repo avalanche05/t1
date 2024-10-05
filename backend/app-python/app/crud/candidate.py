@@ -10,7 +10,7 @@ def get_all(
     speciality: str | None = None,
     isCold: bool | None = None,
     city: str | None = None,
-    work_format: str | None = None
+    work_format: str | None = None,
 ) -> list[Candidate]:
     query = session.query(Candidate)
 
@@ -29,25 +29,28 @@ def get_all(
 
     return query.all()
 
-def create(session: Session, candidate: dict, resume_link: str, is_cold: bool = True) -> Candidate:
-     db_candidate = Candidate(
-                    name=candidate["name"],
-                    phone=candidate["phone"],
-                    email=candidate["email"],
-                    contacts=candidate["contacts"],
-                    skills=candidate["skills"],
-                    experience=candidate["experience"],
-                    position=candidate["position"],
-                    grade=candidate["grade"],
-                    speciality=candidate["speciality"],
-                    education=candidate["education"],
-                    summary=candidate["summary"],
-                    is_cold=is_cold,
-                    resume_link=resume_link,
-                    city=candidate["city"],
-                    work_format=candidate["work_format"],
-                )
-     session.add(db_candidate)
-     session.commit()
-     session.refresh(db_candidate)
-     return db_candidate
+
+def create(
+    session: Session, candidate: dict, resume_link: str, is_cold: bool = True
+) -> Candidate:
+    db_candidate = Candidate(
+        name=candidate["name"],
+        phone=candidate["phone"],
+        email=candidate["email"],
+        contacts=candidate["contacts"],
+        skills=candidate["skills"],
+        experience=candidate["experience"],
+        position=candidate["position"],
+        grade=candidate["grade"],
+        speciality=candidate["speciality"],
+        education=candidate["education"],
+        summary=candidate["summary"],
+        is_cold=is_cold,
+        resume_link=resume_link,
+        city=candidate["city"],
+        work_format=candidate["work_format"],
+    )
+    session.add(db_candidate)
+    session.commit()
+    session.refresh(db_candidate)
+    return db_candidate

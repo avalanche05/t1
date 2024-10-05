@@ -6,6 +6,7 @@ class TokenCreate(BaseSchema):
     username: str
     password: str
 
+
 class Token(BaseSchema):
     access_token: str
     user: User

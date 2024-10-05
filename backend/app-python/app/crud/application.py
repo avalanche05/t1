@@ -28,7 +28,7 @@ def create_or_update(
 
 
 def update_status(
-        session: Session, application_id: int, status: schemas.ApplicationStatusUpdate
+    session: Session, application_id: int, status: schemas.ApplicationStatusUpdate
 ) -> Application:
     db_application = session.query(Application).filter_by(id=application_id).first()
 
@@ -53,11 +53,13 @@ def get_all(
     query = session.query(Application).join(Application.candidate)
 
     if position is not None:
-        query = query.filter(Application.candidate.has(Candidate.position==position))
+        query = query.filter(Application.candidate.has(Candidate.position == position))
     if grade is not None:
-        query = query.filter(Application.candidate.has(Candidate.grade==grade))
+        query = query.filter(Application.candidate.has(Candidate.grade == grade))
     if speciality is not None:
-        query = query.filter(Application.candidate.has(Candidate.speciality==speciality))
+        query = query.filter(
+            Application.candidate.has(Candidate.speciality == speciality)
+        )
     if vacancy_id is not None:
         query = query.filter(Application.vacancy_id == vacancy_id)
     if status is not None:

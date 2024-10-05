@@ -5,6 +5,7 @@ class User(BaseSchema):
     name: str
     username: str
 
+
 class UserCreateRequest(BaseSchema):
     name: str
     username: str

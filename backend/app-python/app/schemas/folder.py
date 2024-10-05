@@ -1,7 +1,9 @@
 from app.common import BaseSchema
 
+
 class FolderCreate(BaseSchema):
     name: str
+
 
 class Folder(BaseSchema):
     id: int
