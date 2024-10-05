@@ -21,11 +21,13 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          envs: BACK_ENV,FRONT_ENV
+          envs: BACK_ENV,FRONT_ENV,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY
           script: |
             cd t1
             git fetch origin
             git reset --hard origin/main
             echo "$BACK_ENV" > ./backend/app-python/.env
             echo "$FRONT_ENV" > ./frontend/.env
-            AWS_ACCESS_KEY_ID=YCAJEgD785XvXVUoL91_OGpr9 AWS_SECRET_ACCESS_KEY=YCPDgWU2qgsQTsw56tOI2ZUBaEpmbd9CAh9jQtin sudo docker compose up --build -d
+            export AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY
+            sudo docker compose up --build -d
