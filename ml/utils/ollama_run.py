@@ -9,8 +9,9 @@ class LlamaRun:
                             model=model_name,
                             temperature=temperature)
 
-    def run(self, context):
+    def run(self, **kwargs):
         llm_chain = LLMChain(prompt=self.prompt,
                              llm=self.model)
-        generated = llm_chain.run(context=context)
+
+        generated = llm_chain.run(kwargs)
         return generated
