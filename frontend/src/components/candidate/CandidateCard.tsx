@@ -92,7 +92,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     onClick={(event) => {
                                         event.stopPropagation();
                                     }}
-                                    className='flex space-x-2'
+                                    className='flex flex-wrap gap-2'
                                 >
                                     <Dialog
                                         open={isStatusDialogOpen}
@@ -220,7 +220,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                                         <div
                                                             className={`w-4 h-4 rounded-full ${
                                                                 statusOrder.indexOf(status) >= index
-                                                                    ? 'bg-blue-500'
+                                                                    ? 'bg-violet-500'
                                                                     : 'bg-gray-300'
                                                             }`}
                                                         ></div>
@@ -237,7 +237,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                                             100
                                                         }%`,
                                                     }}
-                                                    className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500'
+                                                    className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-violet-500'
                                                 ></div>
                                             </div>
                                         </div>
@@ -247,20 +247,13 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                 <div className='space-y-2'>
                                     <Button
                                         onClick={() => {}}
-                                        variant='destructive'
+                                        variant='secondary'
                                         className='w-full'
                                     >
                                         Составить текст для отказа
                                     </Button>
                                     <Button onClick={() => {}} variant='default' className='w-full'>
-                                        Составить текст для предложения
-                                    </Button>
-                                    <Button
-                                        onClick={() => {}}
-                                        variant='secondary'
-                                        className='w-full'
-                                    >
-                                        Сгенерировать текст предложения
+                                        Составить текст для предложения о работе
                                     </Button>
                                 </div>
                                 <Textarea

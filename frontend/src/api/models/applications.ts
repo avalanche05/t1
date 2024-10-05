@@ -12,6 +12,17 @@ export enum ApplicationStatus {
     CandidateDeclined = 'candidateDeclined',
 }
 
+export const ApplicationStatusLabels: Record<ApplicationStatus, string> = {
+    [ApplicationStatus.Pending]: 'Ожидает обработки',
+    [ApplicationStatus.HrAccepted]: 'Принята рекрутером',
+    [ApplicationStatus.HrDeclined]: 'Отклонена рекрутером',
+    [ApplicationStatus.InterviewerAccepted]: 'Интервью пройдено успешно',
+    [ApplicationStatus.InterviewerDeclined]: 'Интервью не пройдено',
+    [ApplicationStatus.Offer]: 'Отправлен оффер',
+    [ApplicationStatus.CandidateAccepted]: 'Принято кандидатом',
+    [ApplicationStatus.CandidateDeclined]: 'Отклонено кандидатом',
+};
+
 export interface Application {
     id: number;
     vacancy: Vacancy;

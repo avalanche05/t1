@@ -5,6 +5,7 @@ import { useStores } from '@/hooks/useStores';
 import { toast } from '@/components/ui/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import ApplicationsFilter from '@/components/ApplicationsFilter';
 
 const Applications = observer(() => {
     const { rootStore } = useStores();
@@ -21,6 +22,8 @@ const Applications = observer(() => {
 
     return (
         <div className='container mx-auto p-4'>
+            <ApplicationsFilter />
+
             <Tabs defaultValue='applications' className='w-full'>
                 <TabsList className='grid w-full grid-cols-2'>
                     <TabsTrigger value='applications'>Отклики</TabsTrigger>
@@ -36,7 +39,7 @@ const Applications = observer(() => {
                             ))}
                         </>
                     ) : (
-                        rootStore.applications.map((application) => (
+                        rootStore.filteredApplications.map((application) => (
                             <CandidateCard
                                 key={application.candidate.id}
                                 candidate={application.candidate}
