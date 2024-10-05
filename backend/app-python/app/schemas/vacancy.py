@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.common import BaseSchema
 
 
@@ -7,3 +9,7 @@ class VacancyCreate(BaseSchema):
     speciality: str
     description: str
     team: str
+
+
+class Vacancy(VacancyCreate):
+    createdAt: datetime

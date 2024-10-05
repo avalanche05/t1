@@ -21,7 +21,6 @@ def get_all(
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
-    isCold: bool | None = None,
 ) -> list[Vacancy]:
     query = session.query(Vacancy)
 
@@ -31,8 +30,6 @@ def get_all(
         query = query.filter(Vacancy.grade == grade)
     if speciality is not None:
         query = query.filter(Vacancy.speciality == speciality)
-    if isCold is not None:
-        query = query.filter(Vacancy.isCold == isCold)
 
     return query.all()
 
