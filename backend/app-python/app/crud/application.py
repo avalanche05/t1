@@ -27,15 +27,19 @@ def create_or_update(
     return db_appication
 
 
-def update_status(session: Session, application_id: int, status: str) -> Application:
-    db_appication = session.query(Application).get(application_id)
-    if db_appication is None:
+def update_status(
+        session: Session, application_id: int, status: schemas.ApplicationStatusUpdate
+) -> Application:
+    db_application = session.query(Application).filter_by(id=application_id).first()
+
+    if db_application is None:
         raise ValueError(f"Application with id: {application_id} not found")
-    db_appication.status = status
-    session.add(db_appication)
+
+    db_application.status = status.status
+    session.add(db_application)
     session.commit()
-    session.refresh(db_appication)
-    return db_appication
+    session.refresh(db_application)
+    return db_application
 
 
 def get_all(
