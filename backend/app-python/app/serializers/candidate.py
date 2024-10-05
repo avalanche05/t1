@@ -3,6 +3,7 @@ from app import models, schemas
 
 def get_candidate(db_candidate: models.Candidate) -> schemas.Candidate:
     return schemas.Candidate(
+        id=db_candidate.id,
         name=db_candidate.name,
         phone=db_candidate.phone,
         email=db_candidate.email,

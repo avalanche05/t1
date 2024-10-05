@@ -1,5 +1,5 @@
 from starlette import status
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Path
 
 from app import models, schemas, serializers
 from app.api.deps import SessionDep
@@ -17,7 +17,7 @@ async def get_applications(
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
-    vacancyId: str | None = None,
+    vacancy_id: int | None = None,
     status: str | None = None,
 ):
     db_applications = application.get_all(
@@ -25,7 +25,7 @@ async def get_applications(
         position=position,
         grade=grade,
         speciality=speciality,
-        vacancyId=vacancyId,
+        vacancy_id=vacancy_id,
         status=status
     )
 
@@ -44,6 +44,24 @@ async def create_application(
     db_application = application.create_or_update(
         session=session,
         application=application_instance
+    )
+
+    return serializers.get_application(db_application)
+
+
+@router.post(
+    "/applications/{application_id}/status/",
+    response_model=schemas.Application
+)
+async def update_application_status(
+        session: SessionDep,
+        application_id: int = Path(...),
+        status_instance: schemas.ApplicationStatusUpdate = Body(...)
+):
+    db_application = application.update_status(
+        session=session,
+        application_id=application_id,
+        status=status_instance
     )
 
     return serializers.get_application(db_application)

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app import schemas
-from app.models import Application
+from app.models import Application, Candidate
 
 
 def create_or_update(
@@ -19,7 +19,7 @@ def create_or_update(
             status="pending",
         )
     else:
-        db_appication.candidate_id = application.candidateId
+        db_appication.candidate_id = application.candidate_id
         db_appication.status = "pending"
     session.add(db_appication)
     session.commit()
@@ -27,15 +27,19 @@ def create_or_update(
     return db_appication
 
 
-def update_status(session: Session, application_id: int, status: str) -> Application:
-    db_appication = session.query(Application).get(application_id)
-    if db_appication is None:
+def update_status(
+        session: Session, application_id: int, status: schemas.ApplicationStatusUpdate
+) -> Application:
+    db_application = session.query(Application).filter_by(id=application_id).first()
+
+    if db_application is None:
         raise ValueError(f"Application with id: {application_id} not found")
-    db_appication.status = status
-    session.add(db_appication)
+
+    db_application.status = status.status
+    session.add(db_application)
     session.commit()
-    session.refresh(db_appication)
-    return db_appication
+    session.refresh(db_application)
+    return db_application
 
 
 def get_all(
@@ -43,19 +47,19 @@ def get_all(
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
-    vacancyId: int | None = None,
+    vacancy_id: int | None = None,
     status: str | None = None,
 ) -> list[Application]:
-    query = session.query(Application)
+    query = session.query(Application).join(Application.candidate)
 
     if position is not None:
-        query = query.filter(Application.candidate.position == position)
+        query = query.filter(Application.candidate.has(Candidate.position==position))
     if grade is not None:
-        query = query.filter(Application.candidate.grade == grade)
+        query = query.filter(Application.candidate.has(Candidate.grade==grade))
     if speciality is not None:
-        query = query.filter(Application.candidate.speciality == speciality)
-    if vacancyId is not None:
-        query = query.filter(Application.vacancy_id == vacancyId)
+        query = query.filter(Application.candidate.has(Candidate.speciality==speciality))
+    if vacancy_id is not None:
+        query = query.filter(Application.vacancy_id == vacancy_id)
     if status is not None:
         query = query.filter(Application.status == status)
 

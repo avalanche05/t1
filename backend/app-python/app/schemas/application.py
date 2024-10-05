@@ -10,8 +10,13 @@ class ApplicationCreate(BaseSchema):
     vacancy_id: int
 
 
+class ApplicationStatusUpdate(BaseSchema):
+    status: str
+
+
 class Application(BaseSchema):
+    id: int
     vacancy: Vacancy
     candidate: Candidate
     status: str
-    createdAt: datetime
+    created_at: datetime
