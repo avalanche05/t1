@@ -15,8 +15,8 @@ jobs:
         env:
           BACK_ENV: ${{ secrets.ENV }}
           FRONT_ENV: ${{ secrets.FRONT_ENV }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: 123
+          AWS_SECRET_ACCESS_KEY: 123
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -28,6 +28,6 @@ jobs:
             git reset --hard origin/main
             echo "$BACK_ENV" > ./backend/app-python/.env
             echo "$FRONT_ENV" > ./frontend/.env
-            export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
-            export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+            set AWS_ACCESS_KEY_ID=123
+            set AWS_SECRET_ACCESS_KEY=123
             sudo docker compose up --build -d
