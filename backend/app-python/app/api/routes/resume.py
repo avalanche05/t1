@@ -61,7 +61,7 @@ class ResumeProcessorThread(threading.Thread):
 
 
 
-@router.post("/")
+@router.post("")
 async def upload_resume(db_session: SessionDep, s3_client: S3ClientDep,storage: StorageDep, files: list[UploadFile] = File(...)) -> ResumeProcessSession:
     succes_files = []
     error_files = []
