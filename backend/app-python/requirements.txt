@@ -14,3 +14,4 @@ werkzeug==3.0.1
 psycopg==3.2.2
 python-multipart==0.0.12
 boto3==1.35.34
+requests==2.32.3

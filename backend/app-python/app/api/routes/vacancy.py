@@ -1,9 +1,7 @@
-from typing import List
-
 from fastapi import APIRouter, Body, Path
 from starlette import status
 
-from app import models, schemas, serializers
+from app import schemas, serializers
 from app.api.deps import SessionDep
 from app.crud import vacancy
 
