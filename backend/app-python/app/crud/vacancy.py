@@ -8,10 +8,14 @@ def create(session: Session, vacancy: schemas.VacancyCreate) -> Vacancy:
     db_vacancy = Vacancy(
         position=vacancy.position,
         grade=vacancy.grade,
-        specialty=vacancy.specialty,
+        speciality=vacancy.speciality,
         description=vacancy.description,
         team=vacancy.team,
     )
+
+    session.add(db_vacancy)
+    session.commit()
+    session.refresh(db_vacancy)
 
     return db_vacancy
 

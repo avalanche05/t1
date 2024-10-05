@@ -11,7 +11,6 @@ class User(BaseEntity):
     name: Mapped[str] = mapped_column()
     username: Mapped[str] = mapped_column()
     hashed_password: Mapped[str] = mapped_column()
-    role: Mapped[str] = (mapped_column(),)
 
     tokens: Mapped[list["Token"]] = relationship(
         cascade="all,delete-orphan", back_populates="user"
