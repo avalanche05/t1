@@ -1,7 +1,8 @@
 import json
 
-from extract_text_from_file import ReadResume
-from ollama_run import LlamaRun
+from utils.extract_text_from_file import ReadResume
+from utils.ollama_run import LlamaRun
+
 
 def main(pdf_path: str):
     template = """Use the following pieces of context to expand text to fields in JSON-format: "name": string, "phone": string, "email": string, "contacts": string, "skills": string, "experience": float, "position": string, "grade": string, "speciality": string, "education":string, "summary": string.
@@ -17,7 +18,7 @@ def main(pdf_path: str):
     resume_text = reader.extract_text()
 
     model = LlamaRun(template=template,
-                     ollama_url="http://127.0.0.1:11434",
+                     ollama_url="https://useful-kite-settled.ngrok-free.app",
                      model_name="llama3.1:8b",
                      temperature=0)
     resume_structured = model.run(context=resume_text)
