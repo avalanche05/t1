@@ -3,7 +3,6 @@
 import { FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
@@ -11,22 +10,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ApplicationStatus, ApplicationStatusLabels } from '@/api/models';
 import { Grade, GradeLabels, WorkSchedule, WorkScheduleLabels } from '@/models/IApplicationsFilter';
 import { useStores } from '@/hooks/useStores';
+import Folders from './Folders';
 
 const ApplicationsFilter = () => {
     const { rootStore } = useStores();
-
-    const [newFolderOpen, setNewFolderOpen] = useState(false);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -47,7 +37,6 @@ const ApplicationsFilter = () => {
     // Обработчик отправки формы
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
 
         rootStore.setApplicationFilter({
             name: formData.name || null,
@@ -61,60 +50,10 @@ const ApplicationsFilter = () => {
         });
     };
 
-    const folders = [
-        { name: 'All', count: 275 },
-        { name: 'In progress', count: 14 },
-        { name: 'Queue', count: 14 },
-        { name: 'Interview', count: 14 },
-        { name: 'Application received', count: 14 },
-    ];
-
     return (
         <div className='w-full mx-auto'>
-            <div className='flex items-center space-x-2 mb-4'>
-                <ChevronLeft className='w-6 h-6 text-gray-400' />
-                <div className='flex-1 overflow-x-auto'>
-                    <div className='flex space-x-2'>
-                        {folders.map((tab) => (
-                            <Button
-                                key={tab.name}
-                                variant={tab.name === 'All' ? 'default' : 'outline'}
-                                className='whitespace-nowrap'
-                            >
-                                {tab.name} <span className='ml-2 text-xs'>{tab.count}</span>
-                            </Button>
-                        ))}
-                    </div>
-                </div>
-                <ChevronRight className='w-6 h-6 text-gray-400' />
-                <Dialog open={newFolderOpen} onOpenChange={setNewFolderOpen}>
-                    <DialogTrigger asChild>
-                        <Button variant='outline' size='icon'>
-                            <Plus className='h-4 w-4' />
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Add New Filter</DialogTitle>
-                        </DialogHeader>
-                        <div className='grid gap-4 py-4'>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor='name' className='text-right'>
-                                    Name
-                                </Label>
-                                <Input id='name' className='col-span-3' />
-                            </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor='criteria' className='text-right'>
-                                    Criteria
-                                </Label>
-                                <Input id='criteria' className='col-span-3' />
-                            </div>
-                        </div>
-                        <Button onClick={() => setNewFolderOpen(false)}>Add Filter</Button>
-                    </DialogContent>
-                </Dialog>
-            </div>
+            <Folders />
+
             <div className='flex flex-col space-y-4 mb-4'>
                 <form onSubmit={(e) => handleSubmit(e)} className='flex flex-col space-y-4 mb-4'>
                     <div className='flex space-x-2'>

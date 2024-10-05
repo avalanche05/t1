@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from '../ui/textarea';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { ChevronsUpDown } from 'lucide-react';
+import AddCandidateToFolderButton from '../AddCandidateToFolderButton';
 
 type Props = {
     candidate: Candidate;
@@ -133,6 +134,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                             </Select>
                                         </DialogContent>
                                     </Dialog>
+
                                     <Dialog
                                         open={isVacancyDialogOpen}
                                         onOpenChange={setIsVacancyDialogOpen}
@@ -165,6 +167,8 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                             </Select>
                                         </DialogContent>
                                     </Dialog>
+
+                                    <AddCandidateToFolderButton candidateId={candidate.id} />
                                 </div>
                             </div>
                         </div>

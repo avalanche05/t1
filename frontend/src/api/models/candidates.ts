@@ -1,4 +1,5 @@
 import { Grade, WorkSchedule } from '@/models/IApplicationsFilter';
+import { Folder } from './folders';
 
 export interface Candidate {
     id: number;
@@ -17,4 +18,5 @@ export interface Candidate {
     resume_link: string;
     work_schedule: WorkSchedule;
     is_cold: boolean;
+    folders: Folder[];
 }

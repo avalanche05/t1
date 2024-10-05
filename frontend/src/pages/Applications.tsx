@@ -18,6 +18,14 @@ const Applications = observer(() => {
                 variant: 'destructive',
             });
         });
+
+        rootStore.fetchFolders().catch(() => {
+            toast({
+                title: 'Ошибка',
+                description: 'Не удалось загрузить папки',
+                variant: 'destructive',
+            });
+        });
     }, [rootStore]);
 
     return (
@@ -35,7 +43,7 @@ const Applications = observer(() => {
                     {rootStore.isApplicationsLoading ? (
                         <>
                             {Array.from({ length: 5 }).map((_, index) => (
-                                <Skeleton key={index} className='bg-slate-200 h-40 w-full mt-5' />
+                                <Skeleton key={index} className='h-40 w-full mt-5' />
                             ))}
                         </>
                     ) : (

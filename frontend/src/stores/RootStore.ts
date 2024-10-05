@@ -1,5 +1,6 @@
 import ApplicationsApiService from '@/api/ApplicationsApiService';
-import { Application, Candidate } from '@/api/models';
+import FoldersApiService from '@/api/FoldersApiService';
+import { Application, Candidate, Folder } from '@/api/models';
 import VacanciesApiService from '@/api/VacanciesApiService';
 import { defaultApplicationsFilter, IApplicationsFilter } from '@/models/IApplicationsFilter';
 import { makeAutoObservable } from 'mobx';
@@ -12,6 +13,10 @@ export class RootStore {
 
     vacancyColdCandidates: Candidate[] = [];
     isVacancyColdCandidatesLoading = false;
+
+    folders: Folder[] = [];
+    isFoldersLoading = false;
+    activeFolderId: number | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -58,7 +63,9 @@ export class RootStore {
             this.filterApplicationsByApplicationProperty('status', 'applicationStatus');
         }
 
-        console.log(this.filteredApplications.map((application) => application.candidate));
+        if (this.activeFolderId) {
+            this.filterApplicationsByFolder(this.activeFolderId);
+        }
     }
 
     filterApplicationsByCandidateProperty(
@@ -75,8 +82,6 @@ export class RootStore {
                 .toLowerCase()
                 .includes(this.applicationsFilter[filterName]!.toLowerCase());
         });
-
-        console.log(this.filteredApplications.map((application) => application.candidate));
     }
 
     filterApplicationsByApplicationProperty(
@@ -89,6 +94,18 @@ export class RootStore {
                 .toLowerCase()
                 .includes(this.applicationsFilter[filterName]!.toLowerCase());
         });
+    }
+
+    filterApplicationsByFolder(folderId: number) {
+        this.filteredApplications = this.filteredApplications.filter((application) => {
+            return application.candidate.folders.some((folder) => folder.id === folderId);
+        });
+    }
+
+    setActiveFolderId(folderId: number | null) {
+        this.activeFolderId = folderId;
+
+        this.filterApplications();
     }
 
     async fetchApplications() {
@@ -118,5 +135,39 @@ export class RootStore {
             .finally(() => {
                 this.isVacancyColdCandidatesLoading = false;
             });
+    }
+
+    async fetchFolders() {
+        this.isFoldersLoading = true;
+
+        return FoldersApiService.fetchFolders()
+            .then((folders) => {
+                this.folders = folders;
+
+                return folders;
+            })
+            .finally(() => {
+                this.isFoldersLoading = false;
+            });
+    }
+
+    async createFolder(name: string) {
+        return FoldersApiService.createFolder({ name }).then((folder) => {
+            this.folders.push(folder);
+
+            return folder;
+        });
+    }
+
+    async addCandidateToFolder(candidateId: number, folderId: number) {
+        return FoldersApiService.addCandidateToFolder({ candidate_id: candidateId, folderId }).then(
+            () => {
+                const folder = this.folders.find((folder) => folder.id === folderId);
+
+                if (folder) {
+                    folder.candidates_count += 1;
+                }
+            }
+        );
     }
 }
