@@ -4,4 +4,5 @@ export enum Pages {
     Home = 'home',
     Applications = 'applications',
     Vacancies = 'vacancies',
+    Comparision = 'comparision',
 }

@@ -42,7 +42,7 @@ const Vacancies = observer(() => {
         rootStore.fetchVacancies({}).catch(() => {
             toast({
                 title: 'Ошибка',
-                description: 'Не удалось загрузить отклики',
+                description: 'Не удалось загрузить вакансии',
                 variant: 'destructive',
             });
         });
@@ -240,7 +240,9 @@ const Vacancies = observer(() => {
                     ? Array.from({ length: 3 }).map((_, index) => (
                           <Skeleton key={index} className='h-52 w-full mb-8' />
                       ))
-                    : rootStore.vacancies.map((vacancy) => <VacancyCard vacancy={vacancy} />)}
+                    : rootStore.vacancies.map((vacancy) => (
+                          <VacancyCard key={vacancy.id} vacancy={vacancy} />
+                      ))}
             </div>
         </>
     );

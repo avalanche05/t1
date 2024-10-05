@@ -9,6 +9,7 @@ import { Pages } from './router/constants';
 import Home from './pages/Home';
 import Applications from './pages/Applications';
 import Vacancies from './pages/Vacancies';
+import Comparision from './pages/Comparision';
 
 function App() {
     return (
@@ -51,6 +52,16 @@ function App() {
                             // <RequireAuth>
                             <Dashboard>
                                 <Vacancies />
+                            </Dashboard>
+                            // </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Comparision}`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Comparision />
                             </Dashboard>
                             // </RequireAuth>
                         }
