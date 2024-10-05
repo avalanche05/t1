@@ -19,6 +19,6 @@ def get_all(
     if speciality is not None:
         query = query.filter(Candidate.speciality == speciality)
     if isCold is not None:
-        query = query.filter(Candidate.isCold == isCold)
+        query = query.filter(Candidate.is_cold == isCold)
 
     return query.all()
