@@ -4,7 +4,7 @@ def get_vacancy(db_vacancy: models.Vacancy) -> schemas.Vacancy:
     return schemas.Vacancy(
         id=db_vacancy.id,
         position=db_vacancy.position,
-        grade=db_vacancy.grade,
+        grade=db_vacancy.grade.lower(),
         speciality=db_vacancy.speciality,
         description=db_vacancy.description,
         team=db_vacancy.team,

@@ -92,10 +92,7 @@ POST /folders создание новой папки
 
 POST /folders/<folder-id> добавление кандидата в папку
  {
-    "name",
     "candidate_id"
  }
-
-GET /folders/<folder-id> получение кандидатов в папке
 
 DELETE /folders/<folder-id> удаление папки

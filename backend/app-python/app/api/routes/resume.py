@@ -39,18 +39,19 @@ class ResumeProcessorThread(threading.Thread):
             response = requests.post("http://127.0.0.1:5000/resume/process", json={
                 "file_key": file_key,
             })
-
+            file_name = file_key.split("~!~")[-1]
             if not response.ok:
                 self._processed_files[file_key] = {
                     "file_name": file_name,
                     "is_success": False,
                     "reason": response.text,
                 }
+                continue
             candidate = response.json()["candidate"]
             with self.lock:
                 db_candidate = crud.candidate.create(self._db_session, candidate, resume_link=file_key)
 
-            file_name = file_key.split("~!~")[-1]
+            
             with self.lock:
                 self._processed_files[file_key] = {
                     "file_name": file_name,
@@ -60,7 +61,7 @@ class ResumeProcessorThread(threading.Thread):
 
 
 
-@router.post("/")
+@router.post("")
 async def upload_resume(db_session: SessionDep, s3_client: S3ClientDep,storage: StorageDep, files: list[UploadFile] = File(...)) -> ResumeProcessSession:
     succes_files = []
     error_files = []
