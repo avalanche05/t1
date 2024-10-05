@@ -37,7 +37,7 @@ class ResumeProcessorThread(threading.Thread):
         while not self._files_queue.empty():
             file_key = self._files_queue.get()
             response = requests.post(
-                f"http://{os.environ.get('ML_RESUME_HOST', 'localhost')}:5000/resume/process",
+                f"{os.environ.get('ML_RESUME_HOST', 'http://localhost')}:5000/resume/process",
                 json={
                     "file_key": file_key,
                 },
