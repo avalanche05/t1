@@ -40,6 +40,7 @@ const Applications = observer(() => {
                             <CandidateCard
                                 key={application.candidate.id}
                                 candidate={application.candidate}
+                                application={application}
                             />
                         ))
                     )}
