@@ -19,7 +19,7 @@ async def login(login: schemas.Login, session: SessionDep) -> schemas.LoginRespo
 
     db_token = auth.create_token(session=session, user_id=db_user.id)
     return schemas.LoginResponse(
-        token=db_token.token,
+        token=db_token.access_token,
         user=serializers.get_user(db_user),
     )
 

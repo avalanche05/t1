@@ -14,7 +14,6 @@ class Role(str, Enum):
 
 
 class LoginResponse(BaseSchema):
-    id: int
     token: str
     user: "User"
 
