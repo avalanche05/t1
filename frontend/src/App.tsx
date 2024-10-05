@@ -7,6 +7,7 @@ import { Dashboard } from './components/Dashboard';
 import { Toaster } from './components/ui/toaster';
 import { Pages } from './router/constants';
 import Home from './pages/Home';
+import Applications from './pages/Applications';
 
 function App() {
     return (
@@ -31,6 +32,16 @@ function App() {
                                     <Home />
                                 </Dashboard>
                             </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Applications />
+                            </Dashboard>
+                            // </RequireAuth>
                         }
                     />
                     <Route

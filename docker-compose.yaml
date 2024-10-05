@@ -11,6 +11,16 @@ services:
     restart: always
     ports:
       - 8181:8000
+  ml-resume:
+    build:
+      context: ml/backend/app-python/
+    environment:
+      - REGION_NAME=ru-central1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    restart: always
+    ports:
+      - 5000:8000
   frontend:
     build:
         context: ./frontend
