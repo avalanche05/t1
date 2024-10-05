@@ -1,4 +1,5 @@
 import copy
+import os
 import queue
 import threading
 import time
@@ -36,7 +37,7 @@ class ResumeProcessorThread(threading.Thread):
         while not self._files_queue.empty():
             file_key = self._files_queue.get()
             response = requests.post(
-                "http://127.0.0.1:5000/resume/process",
+                f"http://{os.environ.get('ML_RESUME_HOST', 'localhost')}:5000/resume/process",
                 json={
                     "file_key": file_key,
                 },
