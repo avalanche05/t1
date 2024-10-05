@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from app.common import BaseSchema
-from app.schemas.vacancy import Vacancy
 from app.schemas.candidate import Candidate
+from app.schemas.vacancy import Vacancy
 
 
 class ApplicationCreate(BaseSchema):

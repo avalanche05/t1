@@ -1,10 +1,10 @@
 from collections.abc import Generator
 from typing import Annotated
 
+from botocore.client import BaseClient
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
-from botocore.client import BaseClient
 
 from app import crud
 from app.core.db import engine
@@ -15,19 +15,22 @@ from app.models import User
 
 storage = {}
 
+
 def get_db() -> Generator[Session, None, None]:
     with Session(engine) as session:
         yield session
 
+
 def get_s3() -> Generator[Session, None, None]:
     s3_client = s3_session.client(
-            service_name='s3',
-            endpoint_url='https://storage.yandexcloud.net'
-        )
+        service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+    )
     yield s3_client
+
 
 def get_storage() -> Generator[Session, None, None]:
     yield storage
+
 
 SessionDep = Annotated[Session, Depends(get_db)]
 S3ClientDep = Annotated[BaseClient, Depends(get_s3)]

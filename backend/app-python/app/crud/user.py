@@ -1,8 +1,9 @@
+from sqlalchemy import not_, or_
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, not_
 
 from app import schemas
 from app.models import User
+
 
 def create(session: Session, user: schemas.User) -> User:
     db_user = session.query(User).filter(User.username == user.username).first()

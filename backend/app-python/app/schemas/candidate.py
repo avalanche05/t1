@@ -9,6 +9,7 @@ class Position(str, Enum):
     MANAGER = "manager"
     DEVELOPER = "developer"
 
+
 class Candidate(BaseSchema):
     id: int
     name: str

@@ -20,7 +20,7 @@ def get_candidate(db_candidate: models.Candidate) -> schemas.Candidate:
         resume_link=db_candidate.resume_link,
         city=db_candidate.city,
         work_format=db_candidate.work_format,
-        folders=folder.get_folders(db_candidate.folders)
+        folders=folder.get_folders(db_candidate.folders),
     )
 
 
