@@ -13,5 +13,7 @@ class Vacancy(BaseEntity):
     speciality: Mapped[str] = mapped_column()
     description: Mapped[str] = mapped_column()
     team: Mapped[str] = mapped_column()
+    city: Mapped[str] = mapped_column()
+    work_format: Mapped[str] = mapped_column()
 
     applications: Mapped[List["Application"]] = relationship(back_populates="vacancy")

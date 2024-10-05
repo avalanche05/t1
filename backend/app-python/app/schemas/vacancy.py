@@ -9,6 +9,8 @@ class VacancyCreate(BaseSchema):
     speciality: str
     description: str
     team: str
+    city: str
+    work_format: str
 
 
 class Vacancy(VacancyCreate):

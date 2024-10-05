@@ -77,3 +77,25 @@ GET /generate/feedback/invitation/vacancies/<vacancy-id>/candidates/<candidate-i
     "qa": [],
     "designer": [],
 }
+
+folder
+{
+    "name",
+    "candidates",
+    "candidates_count"
+}
+
+POST /folders создание новой папки
+{
+    "name"
+}
+
+POST /folders/<folder-id> добавление кандидата в папку
+ {
+    "name",
+    "candidate_id"
+ }
+
+GET /folders/<folder-id> получение кандидатов в папке
+
+DELETE /folders/<folder-id> удаление папки
