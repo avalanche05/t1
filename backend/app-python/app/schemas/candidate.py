@@ -1,6 +1,7 @@
 from enum import Enum
 
 from app.common import BaseSchema
+from app.schemas.folder import Folder
 
 
 class Position(str, Enum):
@@ -15,7 +16,7 @@ class Candidate(BaseSchema):
     contacts: str
     skills: list[str]
     experience: float
-    position: Position
+    position: str
     grade: str
     speciality: str
     education: str
@@ -24,3 +25,4 @@ class Candidate(BaseSchema):
     resume_link: str
     city: str
     work_format: str
+    folders: list[Folder]

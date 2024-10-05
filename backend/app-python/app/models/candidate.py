@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy import Column, String
 
 from app.common import BaseEntity
+from app.models.folder import FolderCandidate
 
 
 class Candidate(BaseEntity):
@@ -24,3 +25,7 @@ class Candidate(BaseEntity):
     work_format: Mapped[str] = mapped_column()
 
     applications: Mapped[list["Application"]] = relationship(back_populates="candidate")
+    folders: Mapped[list["Folder"]] = relationship(
+        secondary=FolderCandidate,
+        back_populates="candidates"
+    )

@@ -52,7 +52,7 @@ async def create_vacancy(
 
 
 @router.get(
-    "/vacancies/{vacancy_id}/cold-candidates",
+    "/vacancies/{vacancy_id}/cold-candidates/",
     status_code=status.HTTP_200_OK,
     response_model=list[schemas.Candidate]
 )
