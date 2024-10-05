@@ -28,3 +28,26 @@ def get_all(
         query = query.filter(Candidate.work_format == work_format)
 
     return query.all()
+
+def create(session: Session, candidate: dict, resume_link: str) -> Candidate:
+     db_candidate = Candidate(
+                    name=candidate["name"],
+                    phone=candidate["phone"],
+                    email=candidate["email"],
+                    contacts=candidate["contacts"],
+                    skills=candidate["skills"],
+                    experience=candidate["experience"],
+                    position=candidate["position"],
+                    grade=candidate["grade"],
+                    speciality=candidate["speciality"],
+                    education=candidate["education"],
+                    summary=candidate["summary"],
+                    is_cold=candidate["is_cold"],
+                    resume_link=resume_link,
+                    city=candidate["city"],
+                    work_format=candidate["work_format"],
+                )
+     session.add(db_candidate)
+     session.commit()
+     session.refresh(db_candidate)
+     return db_candidate
