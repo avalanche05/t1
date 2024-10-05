@@ -55,12 +55,9 @@ class ResumeProcessorThread(threading.Thread):
             with self.lock:
 
                 resume_link = self._s3_client.generate_presigned_url(
-                    'get_object',
-                    Params={
-                        'Bucket': "hack-s3",
-                        'Key': file_key
-                    },
-                    ExpiresIn=7 * 86400
+                    "get_object",
+                    Params={"Bucket": "hack-s3", "Key": file_key},
+                    ExpiresIn=7 * 86400,
                 )
 
                 db_candidate = crud.candidate.create(

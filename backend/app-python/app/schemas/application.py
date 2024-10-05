@@ -12,12 +12,31 @@ class ApplicationCreate(BaseSchema):
 
 
 class ApplicationStatusUpdate(BaseSchema):
-    status: Literal["hrAccepted", "hrDeclined", "interview", "interviewerAccepted", "interviewerDeclined", "offer", "candidateAccepted", "candidateDeclined"] = "pending"
+    status: Literal[
+        "hrAccepted",
+        "hrDeclined",
+        "interview",
+        "interviewerAccepted",
+        "interviewerDeclined",
+        "offer",
+        "candidateAccepted",
+        "candidateDeclined",
+    ] = "pending"
 
 
 class Application(BaseSchema):
     id: int
     vacancy: Vacancy
     candidate: Candidate
-    status: Literal["pending", "hrAccepted", "hrDeclined", "interview", "interviewerAccepted", "interviewerDeclined", "offer", "candidateAccepted", "candidateDeclined"] = "pending"
+    status: Literal[
+        "pending",
+        "hrAccepted",
+        "hrDeclined",
+        "interview",
+        "interviewerAccepted",
+        "interviewerDeclined",
+        "offer",
+        "candidateAccepted",
+        "candidateDeclined",
+    ] = "pending"
     created_at: datetime
