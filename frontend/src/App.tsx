@@ -8,6 +8,7 @@ import { Toaster } from './components/ui/toaster';
 import { Pages } from './router/constants';
 import Home from './pages/Home';
 import Applications from './pages/Applications';
+import Vacancies from './pages/Vacancies';
 
 function App() {
     return (
@@ -35,11 +36,21 @@ function App() {
                         }
                     />
                     <Route
-                        path={`/`}
+                        path={`/${Pages.Applications}`}
                         element={
                             // <RequireAuth>
                             <Dashboard>
                                 <Applications />
+                            </Dashboard>
+                            // </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Vacancies}`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Vacancies />
                             </Dashboard>
                             // </RequireAuth>
                         }

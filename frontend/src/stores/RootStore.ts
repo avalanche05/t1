@@ -1,6 +1,13 @@
 import ApplicationsApiService from '@/api/ApplicationsApiService';
 import FoldersApiService from '@/api/FoldersApiService';
-import { Application, Candidate, Folder } from '@/api/models';
+import {
+    Application,
+    Candidate,
+    CreateVacancyParams,
+    FetchVacancyParams,
+    Folder,
+    Vacancy,
+} from '@/api/models';
 import VacanciesApiService from '@/api/VacanciesApiService';
 import { defaultApplicationsFilter, IApplicationsFilter } from '@/models/IApplicationsFilter';
 import { makeAutoObservable } from 'mobx';
@@ -17,6 +24,9 @@ export class RootStore {
     folders: Folder[] = [];
     isFoldersLoading = false;
     activeFolderId: number | null = null;
+
+    vacancies: Vacancy[] = [];
+    isVacanciesLoading = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -169,5 +179,25 @@ export class RootStore {
                 }
             }
         );
+    }
+
+    async createVacancy(params: CreateVacancyParams) {
+        return VacanciesApiService.createVacancy(params).then(() => {
+            this.fetchVacancies({});
+        });
+    }
+
+    async fetchVacancies(params: FetchVacancyParams) {
+        this.isVacanciesLoading = true;
+
+        return VacanciesApiService.fetchVacancies(params)
+            .then((vacancies) => {
+                this.vacancies = vacancies;
+
+                return vacancies;
+            })
+            .finally(() => {
+                this.isVacanciesLoading = false;
+            });
     }
 }
