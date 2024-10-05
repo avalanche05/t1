@@ -8,7 +8,7 @@ from app.crud import application
 router = APIRouter()
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=list[schemas.Application]
 )
