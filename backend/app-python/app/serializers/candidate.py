@@ -1,4 +1,5 @@
 from app import models, schemas
+from app.serializers import folder
 
 
 def get_candidate(db_candidate: models.Candidate) -> schemas.Candidate:
@@ -10,7 +11,7 @@ def get_candidate(db_candidate: models.Candidate) -> schemas.Candidate:
         contacts=db_candidate.contacts,
         skills=db_candidate.skills,
         experience=db_candidate.experience,
-        position=schemas.Position(db_candidate.position),
+        position=db_candidate.position,
         grade=db_candidate.grade,
         speciality=db_candidate.speciality,
         education=db_candidate.education,
@@ -18,7 +19,8 @@ def get_candidate(db_candidate: models.Candidate) -> schemas.Candidate:
         is_cold=db_candidate.is_cold,
         resume_link=db_candidate.resume_link,
         city=db_candidate.city,
-        work_format=db_candidate.work_format
+        work_format=db_candidate.work_format,
+        folders=folder.get_folders(db_candidate.folders)
     )
 
 
