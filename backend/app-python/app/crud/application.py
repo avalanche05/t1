@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app import schemas
-from app.models import Application
+from app.models import Application, Candidate
 
 
 def create_or_update(
@@ -49,11 +49,11 @@ def get_all(
     query = session.query(Application).join(Application.candidate)
 
     if position is not None:
-        query = query.filter(Application.candidate.position == position)
+        query = query.filter(Application.candidate.has(Candidate.position==position))
     if grade is not None:
-        query = query.filter(Application.candidate.grade == grade)
+        query = query.filter(Application.candidate.has(Candidate.grade==grade))
     if speciality is not None:
-        query = query.filter(Application.candidate.speciality == speciality)
+        query = query.filter(Application.candidate.has(Candidate.speciality==speciality))
     if vacancy_id is not None:
         query = query.filter(Application.vacancy_id == vacancy_id)
     if status is not None:
