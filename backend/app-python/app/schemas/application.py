@@ -11,6 +11,7 @@ class ApplicationCreate(BaseSchema):
 
 
 class Application(BaseSchema):
+    id: int
     vacancy: Vacancy
     candidate: Candidate
     status: str
