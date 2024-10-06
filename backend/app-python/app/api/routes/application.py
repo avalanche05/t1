@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.get(
-    "", status_code=status.HTTP_200_OK#, response_model=list[schemas.Application]
+    "", status_code=status.HTTP_200_OK, response_model=list[schemas.Application]
 )
 async def get_applications(
     session: SessionDep,
@@ -58,7 +58,6 @@ async def get_applications(
             raise HTTPException(status_code=404, detail=response.text)
 
         serialized_candidates = response.json()
-        # return serialized_candidates
         db_applications = [application.get_by_candidate_and_vaccancy(session, candidate["id"], vacancy_id) for candidate
                            in serialized_candidates]
 
