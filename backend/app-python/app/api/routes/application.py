@@ -1,15 +1,19 @@
-from fastapi import APIRouter, Body, Path
+import os
+import requests
+import json
+
+from fastapi import APIRouter, Body, Path, HTTPException
 from starlette import status
 
 from app import models, schemas, serializers
 from app.api.deps import SessionDep
-from app.crud import application
+from app.crud import application, vacancy
 
 router = APIRouter()
 
 
 @router.get(
-    "", status_code=status.HTTP_200_OK, response_model=list[schemas.Application]
+    "", status_code=status.HTTP_200_OK#, response_model=list[schemas.Application]
 )
 async def get_applications(
     session: SessionDep,
@@ -17,7 +21,8 @@ async def get_applications(
     grade: str | None = None,
     speciality: str | None = None,
     vacancy_id: int | None = None,
-    status: str | None = None,
+    sort_status: str | None = None,
+    is_ranked: bool | None = False,
 ):
     db_applications = application.get_all(
         session=session,
@@ -25,8 +30,31 @@ async def get_applications(
         grade=grade,
         speciality=speciality,
         vacancy_id=vacancy_id,
-        status=status,
+        status=sort_status,
     )
+
+    if vacancy_id and is_ranked:
+        db_vacancy = vacancy.get_vacancy(session, vacancy_id)
+        serialized_vacancy = serializers.get_vacancy(db_vacancy)
+        serialized_applications = serializers.get_applications(db_applications)
+        return {
+                "vacancy": serialized_vacancy.json(),
+                "candidates": [serialized_application.candidate.json() for serialized_application in serialized_applications]
+            }
+
+        response = requests.post(
+            f"{os.environ.get('ML_RESUME_HOST', 'http://localhost')}:5000/candidates/rank",
+            json={
+                "vacancy": serialized_vacancy.json(),
+                "candidates": json.dumps([serialized_application.candidate.json() for serialized_application in serialized_applications])
+            },
+        )
+        if response.status_code != status.HTTP_200_OK:
+            raise HTTPException(status_code=404, detail=response.text)
+
+        serialized_candidates = response.json()
+        db_applications = [application.get_by_candidate_and_vaccancy(session, candidate["id"], vacancy_id) for candidate
+                           in serialized_candidates]
 
     return serializers.get_applications(db_applications)
 

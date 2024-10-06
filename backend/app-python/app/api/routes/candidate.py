@@ -37,9 +37,23 @@ async def get_candidates(
 
 @router.get("/rank")
 async def get_ranked_candidates(
-        session: SessionDep,
-        candidate_vacancy: schemas.CandidateVacancy
+    session: SessionDep,
+    position: str | None = None,
+    grade: str | None = None,
+    speciality: str | None = None,
+    isCold: bool | None = None,
+    city: str | None = None,
+    work_format: str | None = None,
 ):
+    db_candidates = candidate.get_all(
+        session=session,
+        position=position,
+        grade=grade,
+        speciality=speciality,
+        isCold=isCold,
+        city=city,
+        work_format=work_format,
+    )
     response = requests.post(
         f"{os.environ.get('ML_RESUME_HOST', 'http://localhost')}:5000/resume/process",
         json={
