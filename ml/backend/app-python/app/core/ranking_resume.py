@@ -37,4 +37,4 @@ class Rank:
             probs = torch.softmax(logits, dim=1)
             probs_positive.append(probs[:, 1].to('cpu').numpy())
 
-        return sorted(probs_positive)
+        return probs_positive
