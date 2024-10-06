@@ -24,7 +24,7 @@ async def generate_approve_feedback(
 
     application = crud.application.get_by_candidate_and_vaccancy(db_session, candidate_id, vacancy_id)
 
-    status = "new"
+    status = "pending"
     if application:
         status = application.status    
 
@@ -63,7 +63,7 @@ async def generate_approve_feedback(
 
     application = crud.application.get_by_candidate_and_vaccancy(db_session, candidate_id, vacancy_id)
 
-    status = "new"
+    status = "pending"
     if application:
         status = application.status    
 
@@ -102,7 +102,7 @@ async def generate_approve_feedback(
 
     application = crud.application.get_by_candidate_and_vaccancy(db_session, candidate_id, vacancy_id)
 
-    status = "new"
+    status = "pending"
     if application:
         status = application.status    
 

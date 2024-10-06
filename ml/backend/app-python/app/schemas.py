@@ -60,7 +60,7 @@ class Vacancy(BaseModel):
     description: str
 
 class FeedbackRequest(BaseModel):
-    action: Literal["invite", "reject", "approve"]
+    action: str
     candidate: CandidateFeedback
     vacancy: Vacancy
     status: str
