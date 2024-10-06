@@ -58,6 +58,13 @@ async def generate_approve_feedback(
     vacancy_id: int,
     candidate_id: int,
 ) -> Feedback:
+
+    application = crud.application.get_by_candidate_and_vaccancy(db_session, candidate_id, vacancy_id)
+
+    status = "new"
+    if application:
+        status = application.status    
+
     candidate = serializers.candidate.get_candidate(crud.candidate.get_candidate(db_session, candidate_id))
     vacancy = serializers.vacancy.get_vacancy(crud.vacancy.get_vacancy(db_session, vacancy_id))
 
@@ -78,6 +85,7 @@ async def generate_approve_feedback(
                     "action": "reject",
                     "vacancy": vacancy_data,
                     "candidate": candidate_data,
+                    "status": status,
                 },
             )
     return Feedback(message=response.json()["message"])
@@ -88,6 +96,13 @@ async def generate_approve_feedback(
     vacancy_id: int,
     candidate_id: int,
 ) -> Feedback:
+
+    application = crud.application.get_by_candidate_and_vaccancy(db_session, candidate_id, vacancy_id)
+
+    status = "new"
+    if application:
+        status = application.status    
+
     candidate = serializers.candidate.get_candidate(crud.candidate.get_candidate(db_session, candidate_id))
     vacancy = serializers.vacancy.get_vacancy(crud.vacancy.get_vacancy(db_session, vacancy_id))
 
@@ -108,6 +123,7 @@ async def generate_approve_feedback(
                     "action": "invite",
                     "vacancy": vacancy_data,
                     "candidate": candidate_data,
+                    "status": status,
                 },
             )
     return Feedback(message=response.json()["message"])
