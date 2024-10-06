@@ -2,6 +2,7 @@ from app.common import BaseSchema
 
 
 class User(BaseSchema):
+    id: int
     name: str
     username: str
 

@@ -5,7 +5,7 @@ from app import schemas
 from app.models import Application, Candidate, Vacancy
 
 
-def create(session: Session, vacancy: schemas.VacancyCreate) -> Vacancy:
+def create(session: Session, vacancy: schemas.VacancyCreate, user: schemas.User) -> Vacancy:
     db_vacancy = Vacancy(
         position=vacancy.position,
         grade=vacancy.grade,
@@ -14,7 +14,8 @@ def create(session: Session, vacancy: schemas.VacancyCreate) -> Vacancy:
         team=vacancy.team,
         city=vacancy.city,
         work_format=vacancy.work_format,
-        skills=[skill.lower().strip() for skill in vacancy.skills]
+        skills=[skill.lower().strip() for skill in vacancy.skills],
+        user_id=user.id
     )
 
     session.add(db_vacancy)

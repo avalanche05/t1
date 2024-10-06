@@ -37,7 +37,7 @@ async def create_vacancy(
 ):
     db_vacancy = vacancy.create(session=session, vacancy=vacancy_instance)
 
-    return serializers.get_vacancy(db_vacancy)
+    return serializers.get_vacancy(db_vacancy, user)
 
 
 @router.get(

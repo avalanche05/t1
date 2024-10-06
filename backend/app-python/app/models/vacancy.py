@@ -18,5 +18,8 @@ class Vacancy(BaseEntity):
     city: Mapped[str] = mapped_column()
     work_format: Mapped[str] = mapped_column()
     skills: Mapped[list[str]] = mapped_column(ARRAY(String))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    user: Mapped["User"] = relationship("User", back_populates="vacancies")
 
     applications: Mapped[List["Application"]] = relationship(back_populates="vacancy")
