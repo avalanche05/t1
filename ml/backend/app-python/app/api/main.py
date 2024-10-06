@@ -1,6 +1,8 @@
+import os
+
 from fastapi import APIRouter
 
-from app.schemas import ResumeProcess, ResumeProcessResponse, Candidate, CandidateVacancy
+from app.schemas import ResumeProcess, ResumeProcessResponse, Candidate, Vacancy, CandidateVacancy
 from app.api.deps import S3ClientDep
 from app.utils.resume_structure import main as file_to_json
 from app.utils.s3 import get_file as s3_get_file
@@ -38,9 +40,11 @@ async def process_resume(resume_process: ResumeProcess, s3_client: S3ClientDep) 
     )
 
 @router.post("/candidate/rank")
-async def get_ranked_candidates(candidate_vacancy: CandidateVacancy, candidates: list[Candidate]):
-    rank_model = Rank()
-    weights = rank_model.rank(candidate_vacancy.vacancy, candidate_vacancy.candidates)
+async def get_ranked_candidates(vacancy: Vacancy, candidates: list[Candidate]):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    weights_path = os.path.join(current_dir, "../model_weight", "resume_ranking.pt")
+    rank_model = Rank(weights=weights_path)
+    weights = rank_model.rank(vacancy, candidates)
     zipped_candidates = sorted(list(zip(weights, candidates)), key=lambda x: x[0], reverse=True)
 
     return [Candidate(

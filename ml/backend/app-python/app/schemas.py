@@ -35,6 +35,7 @@ class Vacancy(BaseModel):
     team: str
     city: str
     work_format: Literal["online", "hybrid", "offline"]
+    skills: list[str]
     created_at: datetime
 
 
