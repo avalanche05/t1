@@ -2,7 +2,7 @@ from sqlalchemy import not_, or_
 from sqlalchemy.orm import Session
 
 from app import schemas
-from app.models import User
+from app.models import User, Token
 
 
 def create(session: Session, user: schemas.User) -> User:
@@ -20,3 +20,14 @@ def create(session: Session, user: schemas.User) -> User:
     session.refresh(db_user)
 
     return db_user
+
+def read_user_by_token(session: Session, token: str) -> User:
+    db_token = session.query(Token).filter(Token.access_token == token).first()
+    if db_token is None:
+        return None
+    else:
+        return db_token.user
+
+
+
+
