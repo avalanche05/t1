@@ -1,7 +1,7 @@
-import { BrainCircuit, Calendar } from 'lucide-react';
+import { BrainCircuit, Building, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Vacancy } from '@/api/models';
-import { GradeLabels } from '@/models/IApplicationsFilter';
+import { GradeLabels, WorkScheduleLabels } from '@/models/IApplicationsFilter';
 
 type Props = {
     vacancy: Vacancy | null;
@@ -26,9 +26,15 @@ const VacancyCard = ({ vacancy }: Props) => {
                                     {GradeLabels[vacancy.grade as keyof typeof GradeLabels]}
                                 </span>
                             </div>
+
+                            <div className='flex items-center'>
+                                <Building className='text-purple-600 mr-2' />
+                                <span>{vacancy.city}</span>
+                            </div>
+
                             <div className='flex items-center'>
                                 <Calendar className='text-purple-600 mr-2' />
-                                <span>3-5 лет</span>
+                                <span>{WorkScheduleLabels[vacancy.work_format]}</span>
                             </div>
                         </div>
 

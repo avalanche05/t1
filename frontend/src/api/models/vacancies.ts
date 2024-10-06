@@ -7,6 +7,8 @@ export interface Vacancy {
     speciality: string;
     description: string;
     team: string;
+    city: string;
+    work_format: WorkSchedule;
     createdAt: string;
 }
 
@@ -25,9 +27,9 @@ export interface CreateVacancyParams {
 }
 
 export interface FetchVacancyParams {
-    position?: string;
-    grade?: Grade;
-    speciality?: string;
-    city?: string;
-    work_format?: WorkSchedule;
+    position?: string | null;
+    grade?: Grade | null;
+    speciality?: string | null;
+    city?: string | null;
+    work_format?: WorkSchedule | null;
 }
