@@ -1,9 +1,11 @@
 from fastapi import APIRouter
 
-from app.schemas import ResumeProcess, ResumeProcessResponse, Candidate
+from app.schemas import ResumeProcess, ResumeProcessResponse, Candidate, FeedbackRequest, Feedback
 from app.api.deps import S3ClientDep
 from app.utils.resume_structure import main as file_to_json
 from app.utils.s3 import get_file as s3_get_file
+
+from app.core.autocomplete_answer import main as generate_feedback
 
 router = APIRouter()
 
@@ -35,3 +37,16 @@ async def process_resume(resume_process: ResumeProcess, s3_client: S3ClientDep) 
             work_format="online",
         )
     )
+
+
+@router.post("/feedback/generate")
+async def process_resume(feedback_request: FeedbackRequest) -> Feedback:
+    message = generate_feedback(data={
+        "target_action": feedback_request.action,
+        "name": feedback_request.candidate.name,
+        "position": feedback_request.vacancy.position,
+        "summary": feedback_request.candidate.summary,
+        "description": feedback_request.vacancy.description,
+    })
+
+    return Feedback(message=message)
