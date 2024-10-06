@@ -38,3 +38,8 @@ export interface FetchApplicationsParams {
     vacancyId?: number;
     status?: ApplicationStatus;
 }
+
+export interface ChangeApplicationStatusParams {
+    applicationId: number;
+    status: ApplicationStatus;
+}

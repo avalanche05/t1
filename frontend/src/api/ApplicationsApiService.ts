@@ -1,6 +1,6 @@
 import { API_URL } from '@/config';
-import { Application, FetchApplicationsParams } from './models';
-import { get } from './http';
+import { Application, ChangeApplicationStatusParams, FetchApplicationsParams } from './models';
+import { get, post } from './http';
 
 class ApplicationsApiService {
     public async fetchApplications(params: FetchApplicationsParams) {
@@ -9,6 +9,13 @@ class ApplicationsApiService {
         });
 
         return response;
+    }
+
+    public async changeApplicationStatus({
+        applicationId,
+        ...params
+    }: ChangeApplicationStatusParams) {
+        await post(`${API_URL}/api/v1/applications/applications/${applicationId}/status`, params);
     }
 }
 

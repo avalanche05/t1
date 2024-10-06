@@ -1,16 +1,15 @@
 import { Application, ApplicationStatus, Candidate } from '@/api/models';
 import { Badge } from '../ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { useState } from 'react';
 import { Card, CardContent } from '../ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { ChevronsUpDown } from 'lucide-react';
 import AddCandidateToFolderButton from '../AddCandidateToFolderButton';
 import { WorkScheduleLabels } from '@/models/IApplicationsFilter';
 import AddToComparisionButton from '../AddToComparisionButton';
+import ChangeApplicationStatusButton from '../ChangeApplicationStatusButton';
 
 type Props = {
     candidate: Candidate;
@@ -18,23 +17,8 @@ type Props = {
 };
 
 const CandidateCard = ({ candidate, application }: Props) => {
-    const [status, setStatus] = useState<ApplicationStatus | null>(application?.status ?? null);
-    const [vacancy, setVacancy] = useState(candidate.position);
     const [generatedText, setGeneratedText] = useState('');
-    const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
-    const [isVacancyDialogOpen, setIsVacancyDialogOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-
-    const handleStatusChange = (newStatus: ApplicationStatus) => {
-        setStatus(newStatus);
-        setIsStatusDialogOpen(false);
-        // Here you would typically update the backend with the new status
-    };
-
-    const handleVacancyChange = (newVacancy: string) => {
-        setVacancy(newVacancy);
-        setIsVacancyDialogOpen(false);
-    };
 
     const statusOrder = [
         ApplicationStatus.Pending,
@@ -97,47 +81,14 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     }}
                                     className='flex flex-wrap gap-2'
                                 >
-                                    <Dialog
-                                        open={isStatusDialogOpen}
-                                        onOpenChange={setIsStatusDialogOpen}
-                                    >
-                                        <DialogTrigger asChild>
-                                            <Button
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                }}
-                                                variant='outline'
-                                            >
-                                                Изменить статус
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Изменить статус</DialogTitle>
-                                            </DialogHeader>
-                                            <Select
-                                                onValueChange={(value) =>
-                                                    handleStatusChange(value as ApplicationStatus)
-                                                }
-                                                defaultValue={status || undefined}
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder='Выберите статус' />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {Object.values(ApplicationStatus).map(
-                                                        (status) => (
-                                                            <SelectItem key={status} value={status}>
-                                                                {status}
-                                                            </SelectItem>
-                                                        )
-                                                    )}
-                                                </SelectContent>
-                                            </Select>
-                                        </DialogContent>
-                                    </Dialog>
+                                    {application?.status && (
+                                        <ChangeApplicationStatusButton
+                                            candidateId={candidate.id}
+                                            currentStatus={application.status}
+                                        />
+                                    )}
 
-                                    <Dialog
+                                    {/* <Dialog
                                         open={isVacancyDialogOpen}
                                         onOpenChange={setIsVacancyDialogOpen}
                                     >
@@ -168,7 +119,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                                 </SelectContent>
                                             </Select>
                                         </DialogContent>
-                                    </Dialog>
+                                    </Dialog> */}
 
                                     <AddCandidateToFolderButton candidateId={candidate.id} />
 
@@ -244,7 +195,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     </a>
                                 </div>
 
-                                {application && status && (
+                                {application && application.status && (
                                     <div className='space-y-2'>
                                         <p className='text-sm font-medium'>Хронология заявки:</p>
                                         <div className='relative pt-1'>
@@ -253,7 +204,9 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                                     <div key={step} className='text-xs'>
                                                         <div
                                                             className={`w-4 h-4 rounded-full ${
-                                                                statusOrder.indexOf(status) >= index
+                                                                statusOrder.indexOf(
+                                                                    application?.status
+                                                                ) >= index
                                                                     ? 'bg-violet-500'
                                                                     : 'bg-gray-300'
                                                             }`}
@@ -266,7 +219,9 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                                 <div
                                                     style={{
                                                         width: `${
-                                                            (statusOrder.indexOf(status) /
+                                                            (statusOrder.indexOf(
+                                                                application?.status
+                                                            ) /
                                                                 (statusOrder.length - 1)) *
                                                             100
                                                         }%`,

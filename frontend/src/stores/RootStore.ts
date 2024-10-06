@@ -2,6 +2,7 @@ import ApplicationsApiService from '@/api/ApplicationsApiService';
 import FoldersApiService from '@/api/FoldersApiService';
 import {
     Application,
+    ApplicationStatus,
     Candidate,
     CreateVacancyParams,
     FetchVacancyParams,
@@ -194,6 +195,14 @@ export class RootStore {
                 if (folder) {
                     folder.candidates_count += 1;
                 }
+            }
+        );
+    }
+
+    async changeApplicationStatus(applicationId: number, status: ApplicationStatus) {
+        return ApplicationsApiService.changeApplicationStatus({ applicationId, status }).then(
+            () => {
+                this.fetchApplications();
             }
         );
     }
