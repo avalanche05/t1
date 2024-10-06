@@ -37,6 +37,7 @@ export interface FetchApplicationsParams {
     speciality?: string;
     vacancyId?: number;
     status?: ApplicationStatus;
+    is_ranked?: boolean;
 }
 
 export interface ChangeApplicationStatusParams {

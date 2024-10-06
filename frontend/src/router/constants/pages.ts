@@ -7,4 +7,5 @@ export enum Pages {
     Comparision = 'comparision',
     Uploader = 'uploader',
     Statistics = 'statistics',
+    InterviewFeedback = 'interview-feedback',
 }

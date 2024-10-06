@@ -123,11 +123,21 @@ const Navigation = () => {
                 </LoaderButton>
             </Link>
 
-            <Link to={`/${Pages.Statistics}`} className='flex items-center gap-2'>
+            {/* <Link to={`/${Pages.InterviewFeedback}`} className='flex items-center gap-2'>
+                <LoaderButton className='flex w-full items-center gap-3 rounded-lg px-3 py-2 my-2 text-muted-foreground transition-all hover:bg-slate-100 bg-slate-50'>
+                    Анализ собеседования
+                </LoaderButton>
+            </Link> */}
+
+            <a
+                href='http://misis.tech:3001/d/de025514pmfb4f/statistika-rekrutjorov?orgId=1'
+                target='_blank'
+                className='flex items-center gap-2'
+            >
                 <LoaderButton className='flex w-full items-center gap-3 rounded-lg px-3 py-2 my-2 text-muted-foreground transition-all hover:bg-slate-100 bg-slate-50'>
                     Статистика
                 </LoaderButton>
-            </Link>
+            </a>
         </>
     );
 };
