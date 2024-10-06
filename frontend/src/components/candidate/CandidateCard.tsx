@@ -10,6 +10,7 @@ import AddCandidateToFolderButton from '../AddCandidateToFolderButton';
 import { WorkScheduleLabels } from '@/models/IApplicationsFilter';
 import AddToComparisionButton from '../AddToComparisionButton';
 import ChangeApplicationStatusButton from '../ChangeApplicationStatusButton';
+import ChangeVacancyButton from '../ChangeVacancyButton';
 
 type Props = {
     candidate: Candidate;
@@ -92,38 +93,11 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                         />
                                     )}
 
-                                    {/* <Dialog
-                                        open={isVacancyDialogOpen}
-                                        onOpenChange={setIsVacancyDialogOpen}
-                                    >
-                                        <DialogTrigger asChild>
-                                            <Button variant='outline'>Изменить вакансию</Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Изменить вакансию</DialogTitle>
-                                            </DialogHeader>
-                                            <Select
-                                                onValueChange={handleVacancyChange}
-                                                defaultValue={vacancy}
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder='Выберите вакансию' />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value='Программист'>
-                                                        Программист
-                                                    </SelectItem>
-                                                    <SelectItem value='Менеджер продукта'>
-                                                        Менеджер продукта
-                                                    </SelectItem>
-                                                    <SelectItem value='UX-дизайнер'>
-                                                        UX-дизайнер
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </DialogContent>
-                                    </Dialog> */}
+                                    <ChangeVacancyButton
+                                        isApplication={!!application}
+                                        candidateId={candidate.id}
+                                        currentVacancyId={application?.vacancy.id}
+                                    />
 
                                     <AddCandidateToFolderButton candidateId={candidate.id} />
 

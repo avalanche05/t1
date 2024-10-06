@@ -291,4 +291,13 @@ export class RootStore {
                 this.isVacanciesLoading = false;
             });
     }
+
+    async createApplication(candidateId: number, vacancyId: number) {
+        return ApplicationsApiService.createApplicatioin({
+            candidate_id: candidateId,
+            vacancy_id: vacancyId,
+        }).then(() => {
+            this.fetchApplications();
+        });
+    }
 }

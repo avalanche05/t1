@@ -43,3 +43,8 @@ export interface ChangeApplicationStatusParams {
     applicationId: number;
     status: ApplicationStatus;
 }
+
+export interface CreateApplicationParams {
+    candidate_id: number;
+    vacancy_id: number;
+}
