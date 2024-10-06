@@ -174,29 +174,31 @@ const Navigation = () => {
         <>
             <Link to={`/${Pages.Applications}`} className='flex items-center gap-2'>
                 <LoaderButton className='flex w-full items-center gap-3 rounded-lg px-3 py-2 my-2 text-muted-foreground transition-all hover:bg-slate-100 bg-slate-50'>
-                    <SaveAll className='h-4 w-4' />
                     Отклики
                 </LoaderButton>
             </Link>
 
             <Link to={`/${Pages.Vacancies}`} className='flex items-center gap-2'>
                 <LoaderButton className='flex w-full items-center gap-3 rounded-lg px-3 py-2 my-2 text-muted-foreground transition-all hover:bg-slate-100 bg-slate-50'>
-                    <SaveAll className='h-4 w-4' />
                     Вакансии
                 </LoaderButton>
             </Link>
 
             <Link to={`/${Pages.Comparision}`} className='flex items-center gap-2'>
                 <LoaderButton className='flex w-full items-center gap-3 rounded-lg px-3 py-2 my-2 text-muted-foreground transition-all hover:bg-slate-100 bg-slate-50'>
-                    <SaveAll className='h-4 w-4' />
                     Сравнение
                 </LoaderButton>
             </Link>
 
             <Link to={`/${Pages.Uploader}`} className='flex items-center gap-2'>
                 <LoaderButton className='flex w-full items-center gap-3 rounded-lg px-3 py-2 my-2 text-muted-foreground transition-all hover:bg-slate-100 bg-slate-50'>
-                    <SaveAll className='h-4 w-4' />
                     Загрузка резюме
+                </LoaderButton>
+            </Link>
+
+            <Link to={`/${Pages.Statistics}`} className='flex items-center gap-2'>
+                <LoaderButton className='flex w-full items-center gap-3 rounded-lg px-3 py-2 my-2 text-muted-foreground transition-all hover:bg-slate-100 bg-slate-50'>
+                    Статистика
                 </LoaderButton>
             </Link>
         </>
