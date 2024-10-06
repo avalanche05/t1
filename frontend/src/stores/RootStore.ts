@@ -12,6 +12,7 @@ import {
 import VacanciesApiService from '@/api/VacanciesApiService';
 import { CandidateToCompare } from '@/models/CandidateToCompare';
 import { defaultApplicationsFilter, IApplicationsFilter } from '@/models/IApplicationsFilter';
+import { defauldVacanciesFilter, IVacanciesFilter } from '@/models/IVacanciesFilter';
 import { makeAutoObservable } from 'mobx';
 
 export class RootStore {
@@ -30,6 +31,7 @@ export class RootStore {
 
     vacancies: Vacancy[] = [];
     isVacanciesLoading = false;
+    vacanciesFilter: IVacanciesFilter = defauldVacanciesFilter;
 
     candidatesToCompare: CandidateToCompare[] = [];
 
@@ -43,6 +45,12 @@ export class RootStore {
         this.filterApplications();
 
         this.filterColdCandidates();
+    }
+
+    setVacanciesFilter(filter: IVacanciesFilter) {
+        this.vacanciesFilter = filter;
+
+        this.fetchVacancies(filter);
     }
 
     filterApplications() {

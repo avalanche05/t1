@@ -60,20 +60,28 @@ const ApplicationsFilter = observer(() => {
             <div className='flex flex-col space-y-4 mb-4'>
                 <form onSubmit={(e) => handleSubmit(e)} className='flex flex-col space-y-4 mb-4'>
                     <div className='flex space-x-2'>
+                        <Select
+                            value={formData.vacancyId}
+                            onValueChange={handleSelectChange('vacancyId')}
+                        >
+                            <SelectTrigger className='flex-1'>
+                                <SelectValue placeholder='Выберите вакансию' />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {rootStore.vacancies.map((vacancy) => (
+                                    <SelectItem key={vacancy.id} value={vacancy.id.toString()}>
+                                        {vacancy.position}: {vacancy.speciality}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
                         <Input
                             placeholder='Имя'
                             className='flex-1'
                             name='name'
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        />
-
-                        <Input
-                            placeholder='Город'
-                            className='flex-1'
-                            name='city'
-                            value={formData.city}
-                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                         />
 
                         <Input
@@ -157,21 +165,13 @@ const ApplicationsFilter = observer(() => {
                             </SelectContent>
                         </Select>
 
-                        <Select
-                            value={formData.vacancyId}
-                            onValueChange={handleSelectChange('vacancyId')}
-                        >
-                            <SelectTrigger className='flex-1'>
-                                <SelectValue placeholder='Выберите вакансию для сравнения' />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {rootStore.vacancies.map((vacancy) => (
-                                    <SelectItem key={vacancy.id} value={vacancy.id.toString()}>
-                                        {vacancy.position}: {vacancy.speciality}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <Input
+                            placeholder='Город'
+                            className='flex-1'
+                            name='city'
+                            value={formData.city}
+                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        />
                     </div>
 
                     <div className='flex space-x-2'>

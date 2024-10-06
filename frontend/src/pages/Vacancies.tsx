@@ -19,6 +19,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/use-toast';
+import VacanciesFilter from '@/components/VacanciesFilter';
 import VacancyCard from '@/components/VacancyCard';
 import { useStores } from '@/hooks/useStores';
 import { Grade, GradeLabels, WorkSchedule, WorkScheduleLabels } from '@/models/IApplicationsFilter';
@@ -234,6 +235,8 @@ const Vacancies = observer(() => {
                     </DialogContent>
                 </Dialog>
             </div>
+
+            <VacanciesFilter />
 
             <div className='mt-8'>
                 {rootStore.isVacanciesLoading
