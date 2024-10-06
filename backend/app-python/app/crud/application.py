@@ -66,3 +66,8 @@ def get_all(
         query = query.filter(Application.status == status)
 
     return query.all()
+
+
+def get_by_candidate_and_vaccancy(session: Session, candidate_id: int, vacancy_id: int) -> Application:
+    db_application = session.query(Application).filter_by(candidate_id=candidate_id, vacancy_id=vacancy_id).first()
+    return db_application
