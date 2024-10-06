@@ -8,6 +8,7 @@ class ResumeProcess(BaseModel):
 
 
 class Candidate(BaseModel):
+    id: int
     name: str
     phone: str
     email: str

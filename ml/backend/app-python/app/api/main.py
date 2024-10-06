@@ -41,12 +41,28 @@ async def process_resume(resume_process: ResumeProcess, s3_client: S3ClientDep) 
     )
 
 @router.post("/candidates/rank")
-async def get_ranked_candidates(data: dict):
+async def get_ranked_candidates(vacancy: Vacancy, candidates: list[Candidate]):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     weights_path = os.path.join(current_dir, "../model_weight", "resume_ranking.pt")
     rank_model = Rank(weights=weights_path)
-    vacancy = json.loads(data["vacancy"])
-    candidates = json.loads(data["candidates"])
+    # vacancy = json.loads(data["vacancy"])
+    # candidates = json.loads(data["candidates"])
+    return [Candidate(
+        id=candidate.id,
+        name=candidate.name,
+        phone=candidate.phone,
+        email=candidate.email,
+        contacts=candidate.contacts,
+        skills=candidate.skills,
+        experience=candidate.experience,
+        position=candidate.position,
+        grade=candidate.grade,
+        speciality=candidate.speciality,
+        education=candidate.education,
+        summary=candidate.summary,
+        city=candidate.city,
+        work_format=candidate.work_format
+    ) for candidate in candidates]
     weights = rank_model.rank(vacancy, candidates)
     zipped_candidates = sorted(list(zip(weights, candidates)), key=lambda x: x[0], reverse=True)
 

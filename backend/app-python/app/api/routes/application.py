@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+from datetime import datetime
 
 from fastapi import APIRouter, Body, Path, HTTPException
 from starlette import status
@@ -37,22 +38,27 @@ async def get_applications(
         db_vacancy = vacancy.get_vacancy(session, vacancy_id)
         serialized_vacancy = serializers.get_vacancy(db_vacancy)
         serialized_applications = serializers.get_applications(db_applications)
-        return {
-                "vacancy": serialized_vacancy.json(),
-                "candidates": [serialized_application.candidate.json() for serialized_application in serialized_applications]
-            }
+        # return {
+        #         "vacancy": serialized_vacancy.json(),
+        #         "candidates": [serialized_application.candidate.json() for serialized_application in serialized_applications]
+        #     }
+        vacancy_dict = serialized_vacancy.dict()
 
+        # Convert datetime fields to string
+        if isinstance(vacancy_dict['created_at'], datetime):
+            vacancy_dict['created_at'] = vacancy_dict['created_at'].isoformat()
         response = requests.post(
             f"{os.environ.get('ML_RESUME_HOST', 'http://localhost')}:5000/candidates/rank",
             json={
-                "vacancy": serialized_vacancy.json(),
-                "candidates": json.dumps([serialized_application.candidate.json() for serialized_application in serialized_applications])
+                "vacancy": vacancy_dict,
+                "candidates": [serialized_application.candidate.dict() for serialized_application in serialized_applications]
             },
         )
         if response.status_code != status.HTTP_200_OK:
             raise HTTPException(status_code=404, detail=response.text)
 
         serialized_candidates = response.json()
+        # return serialized_candidates
         db_applications = [application.get_by_candidate_and_vaccancy(session, candidate["id"], vacancy_id) for candidate
                            in serialized_candidates]
 
