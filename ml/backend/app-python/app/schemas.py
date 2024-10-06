@@ -30,39 +30,19 @@ class Folder(BaseModel):
     candidates_count: int
 
 class CandidateFeedback(BaseModel):
-    id: int
     name: str
-    phone: str
-    email: str
-    contacts: str
-    skills: list[str]
-    experience: float
     position: str
-    grade: Literal["junior", "middle", "senior"]
-    speciality: str
-    education: str
     summary: str
-    is_cold: bool
-    resume_link: str
-    city: str
-    work_format: Literal["online", "hybrid", "offline"]
-    folders: list[Folder]
 
 class Vacancy(BaseModel):
-    id: int
     position: str
-    grade: Literal["junior", "middle", "senior"]
-    speciality: str
     description: str
-    team: str
-    city: str
-    work_format: Literal["online", "hybrid", "offline"]
-    created_at: datetime
 
 class FeedbackRequest(BaseModel):
-    action: Literal["invite", "reject", "rotate"]
+    action: Literal["invite", "reject", "approve"]
     candidate: CandidateFeedback
     vacancy: Vacancy
+    status: str
 
 class Feedback(BaseModel):
     message: str

@@ -49,4 +49,6 @@ async def process_resume(feedback_request: FeedbackRequest) -> Feedback:
         "description": feedback_request.vacancy.description,
     })
 
+    print(feedback_request.status)
+
     return Feedback(message=message)
