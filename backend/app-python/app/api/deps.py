@@ -1,5 +1,5 @@
 from collections.abc import Generator
-from typing import Annotated
+from typing import Annotated, Any
 
 from botocore.client import BaseClient
 from fastapi import Depends, HTTPException, status
@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app import crud
 from app.core.db import engine
 from app.core.s3 import s3_session
+from app.core.ch import ch_client
 from app.models import User
 
 # from app.main import app
@@ -32,10 +33,15 @@ def get_storage() -> Generator[Session, None, None]:
     yield storage
 
 
+def get_ch() -> Generator[Session, None, None]:
+    yield ch_client
+
+
 SessionDep = Annotated[Session, Depends(get_db)]
 S3ClientDep = Annotated[BaseClient, Depends(get_s3)]
 TokenDep = Depends(HTTPBearer())
 StorageDep = Annotated[dict, Depends(get_storage)]
+CHClientDep = Annotated[Any, Depends(get_ch)]
 
 
 def get_current_user(session: SessionDep, token: TokenDep) -> User:

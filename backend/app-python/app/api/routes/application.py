@@ -7,8 +7,8 @@ from fastapi import APIRouter, Body, Path, HTTPException
 from starlette import status
 
 from app import models, schemas, serializers
-from app.api.deps import SessionDep
 from app.crud import application, vacancy
+from app.api.deps import SessionDep, CHClientDep
 
 router = APIRouter()
 
@@ -66,11 +66,18 @@ async def get_applications(
 
 @router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Application)
 async def create_application(
-    session: SessionDep, application_instance: schemas.ApplicationCreate = Body(...)
+    session: SessionDep, ch_client: CHClientDep, application_instance: schemas.ApplicationCreate = Body(...)
 ):
     db_application = application.create_or_update(
         session=session, application=application_instance
     )
+    db_vacancy = db_application.db_vacancy
+    db_candidate = db_application.db_candidate
+
+    ch_client.insert('vacancy_events',
+                      [[db_vacancy.id, db_vacancy.position, db_vacancy.grade, db_vacancy.city, db_vacancy.work_format, "test_username", 1, 'pending', db_candidate.id]],
+                      column_names=['PgID', 'Position', 'Grade', 'City', 'WorkFormat', 'Username', 'UserID', 'Event', 'CandidateID'])
+
 
     return serializers.get_application(db_application)
 
@@ -80,11 +87,20 @@ async def create_application(
 )
 async def update_application_status(
     session: SessionDep,
+    ch_client: CHClientDep,
     application_id: int = Path(...),
     status_instance: schemas.ApplicationStatusUpdate = Body(...),
 ):
     db_application = application.update_status(
         session=session, application_id=application_id, status=status_instance
     )
+
+    db_vacancy = db_application.vacancy
+    db_candidate = db_application.candidate
+
+    ch_client.insert('vacancy_events',
+                      [[db_vacancy.id, db_vacancy.position, db_vacancy.grade, db_vacancy.city, db_vacancy.work_format, "test_username", 1, status_instance.status, db_candidate.id]],
+                      column_names=['PgID', 'Position', 'Grade', 'City', 'WorkFormat', 'Username', 'UserID', 'Event', 'CandidateID'])
+
 
     return serializers.get_application(db_application)
