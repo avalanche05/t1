@@ -5,7 +5,7 @@ import requests
 from fastapi import APIRouter
 
 from app import serializers, crud
-from app.api.deps import SessionDep
+from app.api.deps import SessionDep, CurrentUser
 from app.common import BaseSchema
 
 import requests
@@ -17,6 +17,7 @@ class Feedback(BaseSchema):
 @router.get("/feedback/approve/vacancies/{vacancy_id}/candidates/{candidate_id}")
 async def generate_approve_feedback(
     db_session: SessionDep,
+    db_user: CurrentUser,
     vacancy_id: int,
     candidate_id: int,
 ) -> Feedback:
@@ -55,6 +56,7 @@ async def generate_approve_feedback(
 @router.get("/feedback/reject/vacancies/{vacancy_id}/candidates/{candidate_id}")
 async def generate_approve_feedback(
     db_session: SessionDep,
+    db_user: CurrentUser,
     vacancy_id: int,
     candidate_id: int,
 ) -> Feedback:
@@ -93,6 +95,7 @@ async def generate_approve_feedback(
 @router.get("/feedback/invite/vacancies/{vacancy_id}/candidates/{candidate_id}")
 async def generate_approve_feedback(
     db_session: SessionDep,
+    db_user: CurrentUser,
     vacancy_id: int,
     candidate_id: int,
 ) -> Feedback:

@@ -12,7 +12,7 @@ from app.core.s3 import s3_session
 from app.core.ch import ch_client
 from app.models import User
 
-# from app.main import app
+oauth2_scheme = HTTPBearer()
 
 storage = {}
 
@@ -42,14 +42,14 @@ S3ClientDep = Annotated[BaseClient, Depends(get_s3)]
 TokenDep = Depends(HTTPBearer())
 StorageDep = Annotated[dict, Depends(get_storage)]
 CHClientDep = Annotated[Any, Depends(get_ch)]
+TokenDep = Depends(HTTPBearer())
 
 
-def get_current_user(session: SessionDep, token: TokenDep) -> User:
-    user = crud.get_user_by_token(session, token.credentials)
-    # user = crud.get_user_by_token(session, token)
+def current_user(session: SessionDep, token=TokenDep) -> User:
+    user = crud.read_user_by_token(session, token.credentials)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=401, detail="User not found")
     return user
 
 
-CurrentUser = Annotated[User, Depends(get_current_user)]
+CurrentUser = Annotated[User, Depends(current_user)]

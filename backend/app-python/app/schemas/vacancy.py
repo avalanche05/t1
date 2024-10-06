@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Literal
 
 from app.common import BaseSchema
+from app.schemas.user import User
 
 
 class VacancyCreate(BaseSchema):
@@ -18,3 +19,4 @@ class VacancyCreate(BaseSchema):
 class Vacancy(VacancyCreate):
     id: int
     created_at: datetime
+    user: User

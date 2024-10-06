@@ -8,7 +8,7 @@ from starlette import status
 
 from app import models, schemas, serializers
 from app.crud import application, vacancy
-from app.api.deps import SessionDep, CHClientDep
+from app.api.deps import SessionDep, CHClientDep, CurrentUser
 
 router = APIRouter()
 
@@ -18,6 +18,7 @@ router = APIRouter()
 )
 async def get_applications(
     session: SessionDep,
+    db_user: CurrentUser,
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
@@ -38,15 +39,11 @@ async def get_applications(
         db_vacancy = vacancy.get_vacancy(session, vacancy_id)
         serialized_vacancy = serializers.get_vacancy(db_vacancy)
         serialized_applications = serializers.get_applications(db_applications)
-        # return {
-        #         "vacancy": serialized_vacancy.json(),
-        #         "candidates": [serialized_application.candidate.json() for serialized_application in serialized_applications]
-        #     }
         vacancy_dict = serialized_vacancy.dict()
 
-        # Convert datetime fields to string
         if isinstance(vacancy_dict['created_at'], datetime):
             vacancy_dict['created_at'] = vacancy_dict['created_at'].isoformat()
+
         response = requests.post(
             f"{os.environ.get('ML_RESUME_HOST', 'http://localhost')}:5000/candidates/rank",
             json={
@@ -66,7 +63,7 @@ async def get_applications(
 
 @router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Application)
 async def create_application(
-    session: SessionDep, ch_client: CHClientDep, application_instance: schemas.ApplicationCreate = Body(...)
+    session: SessionDep, ch_client: CHClientDep, db_user: CurrentUser, application_instance: schemas.ApplicationCreate = Body(...)
 ):
     db_application = application.create_or_update(
         session=session, application=application_instance
@@ -88,6 +85,7 @@ async def create_application(
 async def update_application_status(
     session: SessionDep,
     ch_client: CHClientDep,
+    db_user: CurrentUser,
     application_id: int = Path(...),
     status_instance: schemas.ApplicationStatusUpdate = Body(...),
 ):
