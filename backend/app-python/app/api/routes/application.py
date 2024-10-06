@@ -45,12 +45,16 @@ async def create_application(
     db_application = application.create_or_update(
         session=session, application=application_instance
     )
-    db_vacancy = db_application.db_vacancy
-    db_candidate = db_application.db_candidate
 
-    ch_client.insert('vacancy_events',
-                      [[db_vacancy.id, db_vacancy.position, db_vacancy.grade, db_vacancy.city, db_vacancy.work_format, "test_username", 1, 'pending', db_candidate.id]],
-                      column_names=['PgID', 'Position', 'Grade', 'City', 'WorkFormat', 'Username', 'UserID', 'Event', 'CandidateID'])
+    try:
+        db_vacancy = db_application.vacancy
+        db_candidate = db_application.candidate
+
+        ch_client.insert('vacancy_events',
+                        [[db_vacancy.id, db_vacancy.position, db_vacancy.grade, db_vacancy.city, db_vacancy.work_format, "test_username", 1, 'pending', db_candidate.id]],
+                        column_names=['PgID', 'Position', 'Grade', 'City', 'WorkFormat', 'Username', 'UserID', 'Event', 'CandidateID'])
+    except Exception as e:
+        print("Error sending to CH:", e)
 
 
     return serializers.get_application(db_application)
