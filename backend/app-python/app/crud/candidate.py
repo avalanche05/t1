@@ -1,3 +1,4 @@
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from app.models import Candidate
@@ -11,21 +12,32 @@ def get_all(
     isCold: bool | None = None,
     city: str | None = None,
     work_format: str | None = None,
+    skills: str | None = None
 ) -> list[Candidate]:
     query = session.query(Candidate)
 
     if position is not None:
-        query = query.filter(Candidate.position == position)
+        query = query.filter(Candidate.position.ilike(f"%{position}%"))
     if grade is not None:
         query = query.filter(Candidate.grade == grade)
     if speciality is not None:
-        query = query.filter(Candidate.speciality == speciality)
+        query = query.filter(Candidate.position.ilike(f"%{speciality}%"))
     if isCold is not None:
         query = query.filter(Candidate.is_cold == isCold)
     if city is not None:
-        query = query.filter(Candidate.city == city)
+        query = query.filter(Candidate.position.ilike(f"%{city}%"))
     if work_format is not None:
         query = query.filter(Candidate.work_format == work_format)
+    if skills is not None:
+        skills_list = skills.split()
+        query = query.filter(
+            or_(
+                *[
+                    func.array_position(Candidate.skills, term).isnot(None)
+                    for term in skills_list
+                ]
+            )
+        )
 
     return query.all()
 

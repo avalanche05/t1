@@ -18,6 +18,7 @@ async def get_candidates(
     isCold: bool | None = None,
     city: str | None = None,
     work_format: str | None = None,
+    skills: str | None = None
 ) -> List[schemas.Candidate]:
 
     db_candidates = candidate.get_all(
@@ -28,5 +29,6 @@ async def get_candidates(
         isCold=isCold,
         city=city,
         work_format=work_format,
+        skills=skills
     )
     return serializers.get_candidates(db_candidates)

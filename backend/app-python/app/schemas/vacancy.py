@@ -12,6 +12,7 @@ class VacancyCreate(BaseSchema):
     team: str
     city: str
     work_format: Literal["online", "hybrid", "offline"]
+    skills: list[str]
 
 
 class Vacancy(VacancyCreate):

@@ -12,6 +12,7 @@ def get_vacancy(db_vacancy: models.Vacancy) -> schemas.Vacancy:
         created_at=db_vacancy.created_at,
         city=db_vacancy.city,
         work_format=db_vacancy.work_format,
+        skills=db_vacancy.skills
     )
 
 

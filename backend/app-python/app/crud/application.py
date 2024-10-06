@@ -20,6 +20,7 @@ def create_or_update(
         )
     else:
         db_appication.candidate_id = application.candidate_id
+        db_appication.vacancy_id = application.vacancy_id
         db_appication.status = "pending"
     session.add(db_appication)
     session.commit()

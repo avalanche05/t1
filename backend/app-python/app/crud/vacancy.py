@@ -1,4 +1,4 @@
-from sqlalchemy import not_, or_
+from sqlalchemy import not_, or_, func
 from sqlalchemy.orm import Session
 
 from app import schemas
@@ -14,6 +14,7 @@ def create(session: Session, vacancy: schemas.VacancyCreate) -> Vacancy:
         team=vacancy.team,
         city=vacancy.city,
         work_format=vacancy.work_format,
+        skills=vacancy.skills
     )
 
     session.add(db_vacancy)
@@ -30,19 +31,31 @@ def get_all(
     speciality: str | None = None,
     city: str | None = None,
     work_format: str | None = None,
+    skills: str | None = None,
 ) -> list[Vacancy]:
     query = session.query(Vacancy)
 
     if position is not None:
-        query = query.filter(Vacancy.position == position)
+        query = query.filter(Vacancy.position.ilike(f"%{position}%"))
     if grade is not None:
         query = query.filter(Vacancy.grade == grade)
     if speciality is not None:
-        query = query.filter(Vacancy.speciality == speciality)
+        query = query.filter(Vacancy.position.ilike(f"%{speciality}%"))
     if city is not None:
-        query = query.filter(Candidate.city == city)
+        query = query.filter(Vacancy.position.ilike(f"%{city}%"))
     if work_format is not None:
-        query = query.filter(Candidate.work_format == work_format)
+        query = query.filter(Vacancy.work_format == work_format)
+
+    if skills is not None:
+        skills_list = [skill.strip() for skill in skills.split()]
+        query = query.filter(
+            or_(
+                *[
+                    func.array_position(Vacancy.skills, term).isnot(None)
+                    for term in skills_list
+                ]
+            )
+        )
 
     return query.all()
 

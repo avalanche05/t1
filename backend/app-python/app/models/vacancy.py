@@ -1,6 +1,8 @@
 from typing import List
 
 from sqlalchemy import ForeignKey
+from sqlalchemy import Column, String
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.common import BaseEntity
@@ -15,5 +17,6 @@ class Vacancy(BaseEntity):
     team: Mapped[str] = mapped_column()
     city: Mapped[str] = mapped_column()
     work_format: Mapped[str] = mapped_column()
+    skills: Mapped[list[str]] = mapped_column(ARRAY(String))
 
     applications: Mapped[List["Application"]] = relationship(back_populates="vacancy")
