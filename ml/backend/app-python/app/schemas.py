@@ -29,7 +29,7 @@ class Folder(BaseModel):
     name: str
     candidates_count: int
 
-class Candidate(BaseModel):
+class CandidateFeedback(BaseModel):
     id: int
     name: str
     phone: str
@@ -61,7 +61,7 @@ class Vacancy(BaseModel):
 
 class FeedbackRequest(BaseModel):
     action: Literal["invite", "reject", "rotate"]
-    candidate: Candidate
+    candidate: CandidateFeedback
     vacancy: Vacancy
 
 class Feedback(BaseModel):
