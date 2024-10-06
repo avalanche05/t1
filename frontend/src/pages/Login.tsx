@@ -1,9 +1,11 @@
 import { useAuth } from '@/auth';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoaderButton } from '@/components/ui/loader-button';
 import { useToast } from '@/components/ui/use-toast';
+import { Terminal } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -50,21 +52,35 @@ export function Login() {
                     <form onSubmit={handleSubmit} className='grid gap-4'>
                         <div className='grid gap-2'>
                             <Label htmlFor='login'>Логин</Label>
-                            <Input id='login' name='login' required />
+                            <Input defaultValue={'1'} id='login' name='login' required />
                         </div>
                         <div className='grid gap-2'>
                             <div className='flex items-center'>
                                 <Label htmlFor='password'>Пароль</Label>
                             </div>
-                            <Input id='password' name='password' type='password' required />
+                            <Input
+                                defaultValue={'1'}
+                                id='password'
+                                name='password'
+                                type='password'
+                                required
+                            />
                         </div>
                         <LoaderButton isLoading={loading} type='submit' className='w-full'>
                             Войти
                         </LoaderButton>
                     </form>
-                    <div className='mt-4 text-center text-sm'>
-                        Учетные данные для доступа в приложение можно найти в инструкции.
-                    </div>
+
+                    <Alert className='mt-4'>
+                        <Terminal className='h-4 w-4' />
+                        <AlertTitle>Учетные данные для доступа в приложение:</AlertTitle>
+                        <AlertDescription>
+                            <div className='text-sm'>
+                                <div>Логин: 1</div>
+                                <div>Пароль: 1</div>
+                            </div>
+                        </AlertDescription>
+                    </Alert>
                 </CardContent>
             </Card>
         </div>

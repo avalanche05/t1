@@ -6,8 +6,11 @@ import { RequireUnauth } from './auth/RequireUnauth';
 import { Dashboard } from './components/Dashboard';
 import { Toaster } from './components/ui/toaster';
 import { Pages } from './router/constants';
-import Home from './pages/Home';
 import Applications from './pages/Applications';
+import Vacancies from './pages/Vacancies';
+import Comparision from './pages/Comparision';
+import Uploader from './pages/Uploader';
+import Statistics from './pages/Statistics';
 
 function App() {
     return (
@@ -25,23 +28,53 @@ function App() {
                         }
                     />
                     <Route
-                        path={`/${Pages.Home}`}
+                        path={`/${Pages.Applications}`}
                         element={
                             <RequireAuth>
                                 <Dashboard>
-                                    <Home />
+                                    <Applications />
                                 </Dashboard>
                             </RequireAuth>
                         }
                     />
                     <Route
-                        path={`/`}
+                        path={`/${Pages.Vacancies}`}
                         element={
-                            // <RequireAuth>
-                            <Dashboard>
-                                <Applications />
-                            </Dashboard>
-                            // </RequireAuth>
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Vacancies />
+                                </Dashboard>
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Comparision}`}
+                        element={
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Comparision />
+                                </Dashboard>
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Uploader}`}
+                        element={
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Uploader />
+                                </Dashboard>
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Statistics}`}
+                        element={
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Statistics />
+                                </Dashboard>
+                            </RequireAuth>
                         }
                     />
                     <Route
@@ -49,7 +82,7 @@ function App() {
                         element={
                             <RequireAuth>
                                 <Dashboard>
-                                    <Home />
+                                    <Applications />
                                 </Dashboard>
                             </RequireAuth>
                         }

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body, Path
 from starlette import status
 
 from app import schemas, serializers
-from app.api.deps import SessionDep
+from app.api.deps import SessionDep, CHClientDep
 from app.crud import vacancy
 
 router = APIRouter()
@@ -33,9 +33,14 @@ async def get_vacancies(
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Vacancy)
 async def create_vacancy(
-    session: SessionDep, vacancy_instance: schemas.VacancyCreate = Body(...)
+    session: SessionDep, ch_client: CHClientDep, vacancy_instance: schemas.VacancyCreate = Body(...)
 ):
+    
     db_vacancy = vacancy.create(session=session, vacancy=vacancy_instance)
+    ch_client.insert('vacancy_events',
+                      [[db_vacancy.id, db_vacancy.position, db_vacancy.grade, db_vacancy.city, db_vacancy.work_format, "test_username", 1, 'Create']],
+                      column_names=['PgID', 'Position', 'Grade', 'City', 'WorkFormat', 'Username', 'UserID', 'Event'])
+
 
     return serializers.get_vacancy(db_vacancy, user)
 

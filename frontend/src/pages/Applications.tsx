@@ -26,7 +26,29 @@ const Applications = observer(() => {
                 variant: 'destructive',
             });
         });
+
+        rootStore.fetchVacancies({}).catch(() => {
+            toast({
+                title: 'Ошибка',
+                description: 'Не удалось загрузить вакансии',
+                variant: 'destructive',
+            });
+        });
     }, [rootStore]);
+
+    useEffect(() => {
+        if (rootStore.applicationsFilter.vacancyId) {
+            rootStore
+                .fetchVacancyColdCandidates(rootStore.applicationsFilter.vacancyId)
+                .catch(() => {
+                    toast({
+                        title: 'Ошибка',
+                        description: 'Не удалось загрузить кандидатов',
+                        variant: 'destructive',
+                    });
+                });
+        }
+    }, [rootStore, rootStore.applicationsFilter.vacancyId]);
 
     return (
         <div className='container mx-auto p-4'>
@@ -57,9 +79,16 @@ const Applications = observer(() => {
                     )}
                 </TabsContent>
                 <TabsContent value='coldCandidates'>
-                    {rootStore.vacancyColdCandidates.map((candidate) => (
-                        <CandidateCard key={candidate.id} candidate={candidate} />
-                    ))}
+                    {rootStore.applicationsFilter.vacancyId ? (
+                        rootStore.filteredVacancyColdCandidates.map((candidate) => (
+                            <CandidateCard key={candidate.id} candidate={candidate} />
+                        ))
+                    ) : (
+                        <p>
+                            Выберите вакансию, чтобы увидеть кандидатов, которые еще не
+                            откликнулись, но подходят для этой вакансии.
+                        </p>
+                    )}
                 </TabsContent>
             </Tabs>
         </div>

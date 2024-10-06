@@ -33,6 +33,7 @@ export interface IApplicationsFilter {
     experience: string | null;
     workSchedule: WorkSchedule | null;
     applicationStatus: ApplicationStatus | null;
+    vacancyId: number | null;
 }
 
 export const defaultApplicationsFilter: IApplicationsFilter = {
@@ -44,4 +45,5 @@ export const defaultApplicationsFilter: IApplicationsFilter = {
     experience: null,
     workSchedule: null,
     applicationStatus: null,
+    vacancyId: null,
 };

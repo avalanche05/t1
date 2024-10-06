@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from starlette import status
 
 from app import models, schemas, serializers
-from app.api.deps import SessionDep
+from app.api.deps import SessionDep, CurrentUser
 from app.crud import candidate
 
 router = APIRouter()
@@ -14,6 +14,7 @@ router = APIRouter()
 
 @router.get("")
 async def get_candidates(
+    db_user: CurrentUser,
     session: SessionDep,
     position: str | None = None,
     grade: str | None = None,
@@ -21,7 +22,7 @@ async def get_candidates(
     isCold: bool | None = None,
     city: str | None = None,
     work_format: str | None = None,
-    skills: str | None = None
+    skills: str | None = None,
 ) -> List[schemas.Candidate]:
 
     db_candidates = candidate.get_all(

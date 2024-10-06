@@ -1,8 +1,18 @@
 import ApplicationsApiService from '@/api/ApplicationsApiService';
 import FoldersApiService from '@/api/FoldersApiService';
-import { Application, Candidate, Folder } from '@/api/models';
+import {
+    Application,
+    ApplicationStatus,
+    Candidate,
+    CreateVacancyParams,
+    FetchVacancyParams,
+    Folder,
+    Vacancy,
+} from '@/api/models';
 import VacanciesApiService from '@/api/VacanciesApiService';
+import { CandidateToCompare } from '@/models/CandidateToCompare';
 import { defaultApplicationsFilter, IApplicationsFilter } from '@/models/IApplicationsFilter';
+import { defauldVacanciesFilter, IVacanciesFilter } from '@/models/IVacanciesFilter';
 import { makeAutoObservable } from 'mobx';
 
 export class RootStore {
@@ -13,10 +23,17 @@ export class RootStore {
 
     vacancyColdCandidates: Candidate[] = [];
     isVacancyColdCandidatesLoading = false;
+    filteredVacancyColdCandidates: Candidate[] = [];
 
     folders: Folder[] = [];
     isFoldersLoading = false;
     activeFolderId: number | null = null;
+
+    vacancies: Vacancy[] = [];
+    isVacanciesLoading = false;
+    vacanciesFilter: IVacanciesFilter = defauldVacanciesFilter;
+
+    candidatesToCompare: CandidateToCompare[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -26,6 +43,14 @@ export class RootStore {
         this.applicationsFilter = filter;
 
         this.filterApplications();
+
+        this.filterColdCandidates();
+    }
+
+    setVacanciesFilter(filter: IVacanciesFilter) {
+        this.vacanciesFilter = filter;
+
+        this.fetchVacancies(filter);
     }
 
     filterApplications() {
@@ -63,8 +88,44 @@ export class RootStore {
             this.filterApplicationsByApplicationProperty('status', 'applicationStatus');
         }
 
+        if (this.applicationsFilter.vacancyId) {
+            this.filterApplicationsByVacancy(this.applicationsFilter.vacancyId);
+        }
+
         if (this.activeFolderId) {
             this.filterApplicationsByFolder(this.activeFolderId);
+        }
+    }
+
+    filterColdCandidates() {
+        this.filteredVacancyColdCandidates = this.vacancyColdCandidates;
+
+        if (this.applicationsFilter.name) {
+            this.filterCandidatesByProperty('name', 'name');
+        }
+
+        if (this.applicationsFilter.city) {
+            this.filterCandidatesByProperty('city', 'city');
+        }
+
+        if (this.applicationsFilter.position) {
+            this.filterCandidatesByProperty('position', 'position');
+        }
+
+        if (this.applicationsFilter.speciality) {
+            this.filterCandidatesByProperty('speciality', 'speciality');
+        }
+
+        if (this.applicationsFilter.grade) {
+            this.filterCandidatesByProperty('grade', 'grade');
+        }
+
+        if (this.applicationsFilter.experience) {
+            this.filterCandidatesByProperty('experience', 'experience');
+        }
+
+        if (this.applicationsFilter.workSchedule) {
+            this.filterCandidatesByProperty('work_schedule', 'workSchedule');
         }
     }
 
@@ -80,7 +141,7 @@ export class RootStore {
             return application.candidate[propertyName]
                 .toString()
                 .toLowerCase()
-                .includes(this.applicationsFilter[filterName]!.toLowerCase());
+                .includes(this.applicationsFilter[filterName]!.toString().toLowerCase());
         });
     }
 
@@ -92,7 +153,7 @@ export class RootStore {
             return application[propertyName]
                 .toString()
                 .toLowerCase()
-                .includes(this.applicationsFilter[filterName]!.toLowerCase());
+                .includes(this.applicationsFilter[filterName]!.toString().toLowerCase());
         });
     }
 
@@ -102,10 +163,48 @@ export class RootStore {
         });
     }
 
+    filterApplicationsByVacancy(vacancyId: number) {
+        this.filteredApplications = this.filteredApplications.filter(
+            (application) => application.vacancy.id === vacancyId
+        );
+    }
+
+    filterCandidatesByProperty(
+        propertyName: keyof Candidate,
+        filterName: keyof IApplicationsFilter
+    ) {
+        this.filteredVacancyColdCandidates = this.filteredVacancyColdCandidates.filter(
+            (candidate) => {
+                if (candidate[propertyName] === null) {
+                    return false;
+                }
+
+                return candidate[propertyName]
+                    .toString()
+                    .toLowerCase()
+                    .includes(this.applicationsFilter[filterName]!.toString().toLowerCase());
+            }
+        );
+    }
+
     setActiveFolderId(folderId: number | null) {
         this.activeFolderId = folderId;
 
         this.filterApplications();
+    }
+
+    addCandidateToCompare(candidate: Candidate, hasApplication: boolean) {
+        if (this.candidatesToCompare.length >= 3) {
+            this.candidatesToCompare.shift();
+        }
+
+        this.candidatesToCompare.push({ id: candidate.id, candidate, hasApplication });
+    }
+
+    removeCandidateToCompare(candidateId: number) {
+        this.candidatesToCompare = this.candidatesToCompare.filter(
+            (candidate) => candidate.id !== candidateId
+        );
     }
 
     async fetchApplications() {
@@ -129,6 +228,8 @@ export class RootStore {
         return VacanciesApiService.fetchVacancyColdCandidates({ vacancyId })
             .then((candidates) => {
                 this.vacancyColdCandidates = candidates;
+
+                this.filterColdCandidates();
 
                 return candidates;
             })
@@ -169,5 +270,42 @@ export class RootStore {
                 }
             }
         );
+    }
+
+    async changeApplicationStatus(applicationId: number, status: ApplicationStatus) {
+        return ApplicationsApiService.changeApplicationStatus({ applicationId, status }).then(
+            () => {
+                this.fetchApplications();
+            }
+        );
+    }
+
+    async createVacancy(params: CreateVacancyParams) {
+        return VacanciesApiService.createVacancy(params).then(() => {
+            this.fetchVacancies({});
+        });
+    }
+
+    async fetchVacancies(params: FetchVacancyParams) {
+        this.isVacanciesLoading = true;
+
+        return VacanciesApiService.fetchVacancies(params)
+            .then((vacancies) => {
+                this.vacancies = vacancies;
+
+                return vacancies;
+            })
+            .finally(() => {
+                this.isVacanciesLoading = false;
+            });
+    }
+
+    async createApplication(candidateId: number, vacancyId: number) {
+        return ApplicationsApiService.createApplicatioin({
+            candidate_id: candidateId,
+            vacancy_id: vacancyId,
+        }).then(() => {
+            this.fetchApplications();
+        });
     }
 }

@@ -14,8 +14,9 @@ import { ApplicationStatus, ApplicationStatusLabels } from '@/api/models';
 import { Grade, GradeLabels, WorkSchedule, WorkScheduleLabels } from '@/models/IApplicationsFilter';
 import { useStores } from '@/hooks/useStores';
 import Folders from './Folders';
+import { observer } from 'mobx-react-lite';
 
-const ApplicationsFilter = () => {
+const ApplicationsFilter = observer(() => {
     const { rootStore } = useStores();
 
     const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ const ApplicationsFilter = () => {
         experience: '',
         workSchedule: '',
         applicationStatus: '',
+        vacancyId: '',
     });
 
     // Обработчик выбора для select полей
@@ -47,6 +49,7 @@ const ApplicationsFilter = () => {
             experience: formData.experience || null,
             workSchedule: (formData.workSchedule as WorkSchedule) || null,
             applicationStatus: (formData.applicationStatus as ApplicationStatus) || null,
+            vacancyId: formData.vacancyId ? +formData.vacancyId : null,
         });
     };
 
@@ -57,6 +60,22 @@ const ApplicationsFilter = () => {
             <div className='flex flex-col space-y-4 mb-4'>
                 <form onSubmit={(e) => handleSubmit(e)} className='flex flex-col space-y-4 mb-4'>
                     <div className='flex space-x-2'>
+                        <Select
+                            value={formData.vacancyId}
+                            onValueChange={handleSelectChange('vacancyId')}
+                        >
+                            <SelectTrigger className='flex-1'>
+                                <SelectValue placeholder='Выберите вакансию' />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {rootStore.vacancies.map((vacancy) => (
+                                    <SelectItem key={vacancy.id} value={vacancy.id.toString()}>
+                                        {vacancy.position}: {vacancy.speciality}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
                         <Input
                             placeholder='Имя'
                             className='flex-1'
@@ -66,38 +85,26 @@ const ApplicationsFilter = () => {
                         />
 
                         <Input
-                            placeholder='Город'
+                            placeholder='Позиция'
                             className='flex-1'
-                            name='city'
-                            value={formData.city}
-                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                            name='position'
+                            value={formData.position}
+                            onChange={(e) => setFormData({ ...formData, position: e.target.value })}
                         />
-
-                        <Select onValueChange={handleSelectChange('position')}>
-                            <SelectTrigger className='flex-1'>
-                                <SelectValue placeholder='Позиция' />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value='position1'>Позиция 1</SelectItem>
-                                <SelectItem value='position2'>Позиция 2</SelectItem>
-                                <SelectItem value='position3'>Позиция 3</SelectItem>
-                            </SelectContent>
-                        </Select>
                     </div>
 
                     <div className='flex space-x-2'>
-                        <Select onValueChange={handleSelectChange('speciality')}>
-                            <SelectTrigger className='flex-1'>
-                                <SelectValue placeholder='Специальность' />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value='speciality1'>Специальность 1</SelectItem>
-                                <SelectItem value='speciality2'>Специальность 2</SelectItem>
-                                <SelectItem value='speciality3'>Специальность 3</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <Input
+                            placeholder='Специальность'
+                            className='flex-1'
+                            name='speciality'
+                            value={formData.speciality}
+                            onChange={(e) =>
+                                setFormData({ ...formData, speciality: e.target.value })
+                            }
+                        />
 
-                        <Select onValueChange={handleSelectChange('grade')}>
+                        <Select value={formData.grade} onValueChange={handleSelectChange('grade')}>
                             <SelectTrigger className='flex-1'>
                                 <SelectValue placeholder='Грейд' />
                             </SelectTrigger>
@@ -122,7 +129,10 @@ const ApplicationsFilter = () => {
                     </div>
 
                     <div className='flex space-x-2'>
-                        <Select onValueChange={handleSelectChange('workSchedule')}>
+                        <Select
+                            value={formData.workSchedule}
+                            onValueChange={handleSelectChange('workSchedule')}
+                        >
                             <SelectTrigger className='flex-1'>
                                 <SelectValue placeholder='График работы' />
                             </SelectTrigger>
@@ -135,7 +145,10 @@ const ApplicationsFilter = () => {
                             </SelectContent>
                         </Select>
 
-                        <Select onValueChange={handleSelectChange('applicationStatus')}>
+                        <Select
+                            value={formData.applicationStatus}
+                            onValueChange={handleSelectChange('applicationStatus')}
+                        >
                             <SelectTrigger className='flex-1'>
                                 <SelectValue placeholder='Статус отклика' />
                             </SelectTrigger>
@@ -152,7 +165,38 @@ const ApplicationsFilter = () => {
                             </SelectContent>
                         </Select>
 
-                        <Button className='flex-1' type='submit'>
+                        <Input
+                            placeholder='Город'
+                            className='flex-1'
+                            name='city'
+                            value={formData.city}
+                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        />
+                    </div>
+
+                    <div className='flex space-x-2'>
+                        <Button
+                            className='w-1/3'
+                            type='button'
+                            variant={'outline'}
+                            onClick={() =>
+                                setFormData({
+                                    name: '',
+                                    city: '',
+                                    position: '',
+                                    speciality: '',
+                                    grade: '',
+                                    experience: '',
+                                    workSchedule: '',
+                                    applicationStatus: '',
+                                    vacancyId: '',
+                                })
+                            }
+                        >
+                            Очистить
+                        </Button>
+
+                        <Button className='w-1/3' type='submit'>
                             Применить
                         </Button>
                     </div>
@@ -160,6 +204,6 @@ const ApplicationsFilter = () => {
             </div>
         </div>
     );
-};
+});
 
 export default ApplicationsFilter;
