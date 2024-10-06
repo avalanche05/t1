@@ -55,3 +55,8 @@ def get_vacancy_cold_candidates(session: Session, vacancy_id: int) -> list[Candi
         )
     )
     return query.all()
+
+
+def get_vacancy(session: Session, vacancy_id: int) -> Vacancy:
+    query = session.query(Vacancy).filter(Vacancy.id == vacancy_id)
+    return query.first()

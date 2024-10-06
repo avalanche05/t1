@@ -54,3 +54,7 @@ def create(
     session.commit()
     session.refresh(db_candidate)
     return db_candidate
+
+
+def get_candidate(session: Session, candidate_id: int) -> Candidate:
+    return session.query(Candidate).filter(Candidate.id == candidate_id).first()
