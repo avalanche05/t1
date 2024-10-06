@@ -35,29 +35,6 @@ async def get_applications(
         status=sort_status,
     )
 
-    if vacancy_id and is_ranked:
-        db_vacancy = vacancy.get_vacancy(session, vacancy_id)
-        serialized_vacancy = serializers.get_vacancy(db_vacancy)
-        serialized_applications = serializers.get_applications(db_applications)
-        vacancy_dict = serialized_vacancy.dict()
-
-        if isinstance(vacancy_dict['created_at'], datetime):
-            vacancy_dict['created_at'] = vacancy_dict['created_at'].isoformat()
-
-        response = requests.post(
-            f"{os.environ.get('ML_RESUME_HOST', 'http://localhost')}:5000/candidates/rank",
-            json={
-                "vacancy": vacancy_dict,
-                "candidates": [serialized_application.candidate.dict() for serialized_application in serialized_applications]
-            },
-        )
-        if response.status_code != status.HTTP_200_OK:
-            raise HTTPException(status_code=404, detail=response.text)
-
-        serialized_candidates = response.json()
-        db_applications = [application.get_by_candidate_and_vaccancy(session, candidate["id"], vacancy_id) for candidate
-                           in serialized_candidates]
-
     return serializers.get_applications(db_applications)
 
 
