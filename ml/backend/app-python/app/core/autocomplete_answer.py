@@ -1,4 +1,4 @@
-from utils.ollama_run import LlamaRun
+from app.utils.ollama_run import LlamaRun
 
 
 def main(data):
@@ -8,33 +8,33 @@ def main(data):
     Вакансия: {position}. Описание вакансии: {description}.
     """
     model = LlamaRun(
-        template=template,
+        template="Представь, что ты HR и тебе надо кандидатом",
         ollama_url="https://useful-kite-settled.ngrok-free.app",
         model_name="llama3.1:8b",
         temperature=0
     )
     if data['target_action'] == "invite":
-        text = model.run(name=data['name'],
+        text = model.run(template.format(name=data['name'],
                          target_action="пригласить",
                          position=data['position'],
                          summary=data['summary'],
-                         description=data['description'],
+                         description=data['description']),
                          )
 
     if data['target_action'] == "reject":
-        text = model.run(name=data['name'],
+        text = model.run(dict(name=data['name'],
                          target_action="отказать",
                          position=data['position'],
                          summary=data['summary'],
-                         description=data['description'],
+                         description=data['description']),
                          )
 
     if data['target_action'] == "rotate":
-        text = model.run(name=data['name'],
+        text = model.run(dict(name=data['name'],
                          target_action="предложить другую вакансию",
                          position=data['position'],
                          summary=data['summary'],
-                         description=data['description'],
+                         description=data['description']),
                          )
 
     return text

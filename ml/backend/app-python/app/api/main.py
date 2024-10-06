@@ -39,8 +39,8 @@ async def process_resume(resume_process: ResumeProcess, s3_client: S3ClientDep) 
     )
 
 
-@router.get("/feedback/generate")
-async def process_resume(feedback_request: FeedbackRequest) -> str:
+@router.post("/feedback/generate")
+async def process_resume(feedback_request: FeedbackRequest) -> Feedback:
     message = generate_feedback(data={
         "target_action": feedback_request.action,
         "name": feedback_request.candidate.name,
