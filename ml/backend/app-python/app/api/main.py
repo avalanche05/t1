@@ -7,7 +7,6 @@ from app.schemas import ResumeProcess, ResumeProcessResponse, Candidate, Feedbac
 from app.api.deps import S3ClientDep
 from app.utils.resume_structure import main as file_to_json
 from app.utils.s3 import get_file as s3_get_file
-from app.core.ranking_resume import Rank
 
 from app.core.autocomplete_answer import main as generate_feedback
 
