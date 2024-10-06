@@ -13,6 +13,7 @@ class ApplicationCreate(BaseSchema):
 
 class ApplicationStatusUpdate(BaseSchema):
     status: Literal[
+        "pending",
         "hrAccepted",
         "hrDeclined",
         "interview",
