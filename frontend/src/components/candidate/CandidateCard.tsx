@@ -1,4 +1,4 @@
-import { Application, ApplicationStatus, Candidate } from '@/api/models';
+import { Application, ApplicationStatus, ApplicationStatusLabels, Candidate } from '@/api/models';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useState } from 'react';
@@ -10,6 +10,8 @@ import AddCandidateToFolderButton from '../AddCandidateToFolderButton';
 import { WorkScheduleLabels } from '@/models/IApplicationsFilter';
 import AddToComparisionButton from '../AddToComparisionButton';
 import ChangeApplicationStatusButton from '../ChangeApplicationStatusButton';
+import ChangeVacancyButton from '../ChangeVacancyButton';
+import GenerateFeedbackBlock from '../GenerateFeedbackBlock';
 
 type Props = {
     candidate: Candidate;
@@ -36,7 +38,11 @@ const CandidateCard = ({ candidate, application }: Props) => {
                         <div className='flex items-center justify-between'>
                             <div className='flex items-center'>
                                 <h2 className='text-2xl font-bold'>{candidate.name}</h2>
-                                {status && <Badge className='ml-2'>{status}</Badge>}
+                                {application?.status && (
+                                    <Badge className='ml-2'>
+                                        {ApplicationStatusLabels[application.status]}
+                                    </Badge>
+                                )}
                             </div>
 
                             <CollapsibleTrigger asChild>
@@ -88,38 +94,11 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                         />
                                     )}
 
-                                    {/* <Dialog
-                                        open={isVacancyDialogOpen}
-                                        onOpenChange={setIsVacancyDialogOpen}
-                                    >
-                                        <DialogTrigger asChild>
-                                            <Button variant='outline'>Изменить вакансию</Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Изменить вакансию</DialogTitle>
-                                            </DialogHeader>
-                                            <Select
-                                                onValueChange={handleVacancyChange}
-                                                defaultValue={vacancy}
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder='Выберите вакансию' />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value='Программист'>
-                                                        Программист
-                                                    </SelectItem>
-                                                    <SelectItem value='Менеджер продукта'>
-                                                        Менеджер продукта
-                                                    </SelectItem>
-                                                    <SelectItem value='UX-дизайнер'>
-                                                        UX-дизайнер
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </DialogContent>
-                                    </Dialog> */}
+                                    <ChangeVacancyButton
+                                        isApplication={!!application}
+                                        candidateId={candidate.id}
+                                        currentVacancyId={application?.vacancy.id}
+                                    />
 
                                     <AddCandidateToFolderButton candidateId={candidate.id} />
 
@@ -211,7 +190,9 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                                                     : 'bg-gray-300'
                                                             }`}
                                                         ></div>
-                                                        <p className='mt-1'>{step}</p>
+                                                        <p className='mt-1'>
+                                                            {ApplicationStatusLabels[step]}
+                                                        </p>
                                                     </div>
                                                 ))}
                                             </div>
@@ -233,26 +214,14 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     </div>
                                 )}
                             </div>
-                            <div className='w-full md:w-1/3 space-y-4'>
-                                <div className='space-y-2'>
-                                    <Button
-                                        onClick={() => {}}
-                                        variant='secondary'
-                                        className='w-full'
-                                    >
-                                        Составить текст для отказа
-                                    </Button>
-                                    <Button onClick={() => {}} variant='default' className='w-full'>
-                                        Составить текст для предложения о работе
-                                    </Button>
+                            {application && application.vacancy && application.vacancy.id && (
+                                <div className='w-full md:w-1/3 space-y-4'>
+                                    <GenerateFeedbackBlock
+                                        candidateId={candidate.id}
+                                        vacancyId={application.vacancy.id}
+                                    />
                                 </div>
-                                <Textarea
-                                    placeholder='Сгенерированный текст появится здесь'
-                                    value={generatedText}
-                                    onChange={(e) => setGeneratedText(e.target.value)}
-                                    rows={4}
-                                />
-                            </div>
+                            )}
                         </div>
                     </CollapsibleContent>
                 </Collapsible>

@@ -2,9 +2,9 @@ import { Candidate } from './candidates';
 import { Vacancy } from './vacancies';
 
 export enum ApplicationStatus {
-    Pending = 'Pending',
-    HrAccepted = 'HrAccepted',
-    HrDeclined = 'HrDeclined',
+    Pending = 'pending',
+    HrAccepted = 'hrAccepted',
+    HrDeclined = 'hrDeclined',
     InterviewerAccepted = 'interviewerAccepted',
     InterviewerDeclined = 'interviewerDeclined',
     Offer = 'offer',
@@ -42,4 +42,9 @@ export interface FetchApplicationsParams {
 export interface ChangeApplicationStatusParams {
     applicationId: number;
     status: ApplicationStatus;
+}
+
+export interface CreateApplicationParams {
+    candidate_id: number;
+    vacancy_id: number;
 }

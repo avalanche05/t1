@@ -11,7 +11,7 @@ import { get, post } from './http';
 class VacanciesApiService {
     public async fetchVacancyColdCandidates({ vacancyId }: FetchVacancyColdCandidatesParams) {
         const response = await get<Candidate[]>(
-            `${API_URL}/api/v1/vacancies/${vacancyId}/candidates`
+            `${API_URL}/api/v1/vacancies/vacancies/${vacancyId}/cold-candidates`
         );
 
         return response;
