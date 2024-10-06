@@ -76,6 +76,21 @@ const ComparisionTable = observer(() => {
                                             ({ candidate }) => candidate.work_schedule
                                         ),
                                     },
+                                    {
+                                        label: 'Резюме',
+                                        values: rootStore.candidatesToCompare.map(
+                                            ({ candidate }) => (
+                                                <a
+                                                    href={candidate.resume_link}
+                                                    target='_blank'
+                                                    rel='noopener noreferrer'
+                                                    className='text-blue-500 hover:underline'
+                                                >
+                                                    Просмотреть резюме
+                                                </a>
+                                            )
+                                        ),
+                                    },
                                 ].map((row, index) => (
                                     <tr
                                         key={index}
