@@ -14,8 +14,8 @@ router = APIRouter()
 
 @router.get("")
 async def get_candidates(
-    db_user: CurrentUser,
     session: SessionDep,
+    db_user: CurrentUser,
     position: str | None = None,
     grade: str | None = None,
     speciality: str | None = None,
@@ -35,36 +35,4 @@ async def get_candidates(
         work_format=work_format,
         skills=skills
     )
-    return serializers.get_candidates(db_candidates)
-
-
-@router.get("/rank")
-async def get_ranked_candidates(
-    session: SessionDep,
-    position: str | None = None,
-    grade: str | None = None,
-    speciality: str | None = None,
-    isCold: bool | None = None,
-    city: str | None = None,
-    work_format: str | None = None,
-):
-    db_candidates = candidate.get_all(
-        session=session,
-        position=position,
-        grade=grade,
-        speciality=speciality,
-        isCold=isCold,
-        city=city,
-        work_format=work_format,
-    )
-    response = requests.post(
-        f"{os.environ.get('ML_RESUME_HOST', 'http://localhost')}:5000/resume/process",
-        json={
-            candidate_vacancy.dict()
-        },
-    )
-    if response.status_code != status.HTTP_200_OK:
-        raise HTTPException(status_code=404, detail=response.text)
-
-    db_candidates = response.json()
     return serializers.get_candidates(db_candidates)

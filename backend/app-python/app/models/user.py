@@ -22,6 +22,12 @@ class User(BaseEntity):
         cascade="all, delete-orphan"
     )
 
+    folders: Mapped[list["Folder"]] = relationship(
+        "Folder",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 

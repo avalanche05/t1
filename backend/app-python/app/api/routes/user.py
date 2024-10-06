@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Body, Depends, HTTPException
 
 from app import models, schemas, serializers
-from app.api.deps import SessionDep
+from app.api.deps import SessionDep, CurrentUser
 from app.crud import auth, user
 
 router = APIRouter()

@@ -10,7 +10,7 @@ import requests
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from app import crud, serializers, utils
-from app.api.deps import S3ClientDep, SessionDep, StorageDep
+from app.api.deps import S3ClientDep, SessionDep, StorageDep, CurrentUser
 from app.crud import auth
 from app.models.application import Application
 from app.models.candidate import Candidate
@@ -99,6 +99,7 @@ async def upload_resume(
     db_session: SessionDep,
     s3_client: S3ClientDep,
     storage: StorageDep,
+    db_user: CurrentUser,
     files: list[UploadFile] = File(...),
     vacancy_id: int | None = None,
 ) -> ResumeProcessSession:
@@ -146,7 +147,7 @@ async def upload_resume(
 
 
 @router.get("/{session_id}")
-async def get_resume_process_session(storage: StorageDep, session_id: str):
+async def get_resume_process_session(storage: StorageDep, db_user: CurrentUser, session_id: str):
     if session_id not in storage:
         raise HTTPException(
             status_code=404, detail=f"Session with id: {session_id} not found"
