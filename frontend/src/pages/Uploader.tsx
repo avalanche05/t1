@@ -1,5 +1,12 @@
 import { ResumeUploadResponse } from '@/api/models';
 import ResumeUploadApiService from '@/api/ResumeUploadApiService';
+import CandidateCard from '@/components/candidate/CandidateCard';
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
@@ -170,23 +177,37 @@ const Uploader = observer(() => {
                             <div>
                                 <h2 className='text-lg font-semibold mb-2'>Успешно загружены</h2>
                                 {uploadResponse.success.map((file) => (
-                                    <div
-                                        key={file.file_name}
-                                        className='border p-4 rounded-md mt-2'
-                                    >
-                                        <div className='flex items-center justify-between mb-2'>
-                                            <span className='font-semibold'>{file.file_name}</span>
+                                    <>
+                                        <div
+                                            key={file.file_name}
+                                            className='border p-4 rounded-md mt-2'
+                                        >
+                                            <div className='flex items-center justify-between mb-2'>
+                                                <span className='font-semibold'>
+                                                    {file.file_name}
+                                                </span>
 
-                                            <CheckCircle className='h-4 w-4 text-green-500' />
+                                                <CheckCircle className='h-4 w-4 text-green-500' />
+                                            </div>
+
+                                            <div>Имя: {file.candidate.name}</div>
+
+                                            <Progress value={100} className='w-full' />
+                                            <p className='text-sm text-gray-500 mt-1'>
+                                                Статус: Успешно загружен
+                                            </p>
                                         </div>
-
-                                        <div>Имя: {file.candidate.name}</div>
-
-                                        <Progress value={100} className='w-full' />
-                                        <p className='text-sm text-gray-500 mt-1'>
-                                            Статус: Успешно загружен
-                                        </p>
-                                    </div>
+                                        <Accordion type='single' collapsible className='w-full'>
+                                            <AccordionItem value='item-1'>
+                                                <AccordionTrigger>
+                                                    Информация о кандидате
+                                                </AccordionTrigger>
+                                                <AccordionContent>
+                                                    <CandidateCard candidate={file.candidate} />
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    </>
                                 ))}
                             </div>
                         )}

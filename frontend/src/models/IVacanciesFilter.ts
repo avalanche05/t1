@@ -6,6 +6,7 @@ export interface IVacanciesFilter {
     speciality?: string | null;
     city?: string | null;
     work_format?: WorkSchedule | null;
+    skills?: string | null;
 }
 
 export const defauldVacanciesFilter = {
@@ -14,4 +15,5 @@ export const defauldVacanciesFilter = {
     speciality: null,
     city: null,
     work_format: null,
+    skills: null,
 };

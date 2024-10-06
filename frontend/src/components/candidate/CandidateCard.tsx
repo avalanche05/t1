@@ -87,7 +87,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                 >
                                     {application?.status && (
                                         <ChangeApplicationStatusButton
-                                            candidateId={candidate.id}
+                                            applicationId={application.id}
                                             currentStatus={application.status}
                                         />
                                     )}

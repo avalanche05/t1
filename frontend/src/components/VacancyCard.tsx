@@ -2,6 +2,7 @@ import { BrainCircuit, Building, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Vacancy } from '@/api/models';
 import { GradeLabels, WorkScheduleLabels } from '@/models/IApplicationsFilter';
+import { Badge } from './ui/badge';
 
 type Props = {
     vacancy: Vacancy | null;
@@ -39,7 +40,18 @@ const VacancyCard = ({ vacancy }: Props) => {
                         </div>
 
                         <div>
-                            <h3 className='font-bold mb-2'>Описание:</h3>
+                            <div>
+                                <p className='text-sm font-medium'>Навыки:</p>
+                                <div className='flex flex-wrap gap-2 mt-1'>
+                                    {vacancy.skills.map((skill, index) => (
+                                        <Badge key={index} variant='secondary'>
+                                            {skill}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <h3 className='font-bold mb-2 mt-4'>Описание:</h3>
                             <p>{vacancy.description}</p>
                         </div>
                     </div>
