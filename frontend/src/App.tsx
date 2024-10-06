@@ -11,6 +11,7 @@ import Vacancies from './pages/Vacancies';
 import Comparision from './pages/Comparision';
 import Uploader from './pages/Uploader';
 import Statistics from './pages/Statistics';
+import InterviewFeedback from './pages/InterviewFeedback';
 
 function App() {
     return (
@@ -73,6 +74,16 @@ function App() {
                             <RequireAuth>
                                 <Dashboard>
                                     <Statistics />
+                                </Dashboard>
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.InterviewFeedback}`}
+                        element={
+                            <RequireAuth>
+                                <Dashboard>
+                                    <InterviewFeedback />
                                 </Dashboard>
                             </RequireAuth>
                         }
