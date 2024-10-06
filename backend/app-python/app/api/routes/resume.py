@@ -12,8 +12,8 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 from app import crud, serializers, utils
 from app.api.deps import S3ClientDep, SessionDep, StorageDep
 from app.crud import auth
-from app.models.candidate import Candidate
 from app.models.application import Application
+from app.models.candidate import Candidate
 from app.schemas import FileResult, ResumeProcessSession
 from app.serializers.user import get_user
 
@@ -21,7 +21,14 @@ router = APIRouter()
 
 
 class ResumeProcessorThread(threading.Thread):
-    def __init__(self, session_id: str, files: list[str], db_session, s3_client, vacancy_id: int | None = None):
+    def __init__(
+        self,
+        session_id: str,
+        files: list[str],
+        db_session,
+        s3_client,
+        vacancy_id: int | None = None,
+    ):
         threading.Thread.__init__(self)
         self.session_id = session_id
         self.files = files
@@ -63,16 +70,21 @@ class ResumeProcessorThread(threading.Thread):
                 )
 
                 db_candidate = crud.candidate.create(
-                    self._db_session, candidate, resume_link=resume_link, is_cold=bool(self.vacancy_id is None)
+                    self._db_session,
+                    candidate,
+                    resume_link=resume_link,
+                    is_cold=bool(self.vacancy_id is None),
                 )
 
                 if self.vacancy_id:
-                    crud.application.create_or_update(self._db_session, Application(
-                        vacancy_id=self.vacancy_id,
-                        candidate_id=db_candidate.id,
-                        status="pending",
-                    ))
-
+                    crud.application.create_or_update(
+                        self._db_session,
+                        Application(
+                            vacancy_id=self.vacancy_id,
+                            candidate_id=db_candidate.id,
+                            status="pending",
+                        ),
+                    )
 
             with self.lock:
                 self._processed_files[file_key] = {
