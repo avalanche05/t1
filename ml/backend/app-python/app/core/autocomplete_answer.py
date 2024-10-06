@@ -2,39 +2,34 @@ from app.utils.ollama_run import LlamaRun
 
 
 def main(data):
-    template = """Представь, что ты HR и тебе надо {target_action} кандидата. 
-    Напиши текст, который можно отправить кандидату в мессенджер.
-    Кандидата зовут {name}. Резюме кандидата: {summary}. 
-    Вакансия: {position}. Описание вакансии: {description}.
-    """
+    template = """You are an HR. Write message to the candidate in a conversational style (for a messenger) using the following context:
+        Candidate name: {name}.
+        Vacancy name: {position}.
+        Message type - {target_action}. Explanation what message consists of:
+
+            - pending: поздороваться с кандидатом, сказать что ждём на интервью;
+
+            - hrAccepted: сказать что интервью будет в [ДАТА] и [ВРЕМЯ], дату и время можно в интерфейсе поменять на сайте;
+
+            - interviewerAccepted: поздравить с пройденными интервью, спросить про зарплатные ожидания;
+
+            - offer: напомнить кандидату, что он должен направить письмо с принятием предложения на работу;
+
+            - candidateAccepted:  отсылаем поздравительное письмо: добро пожаловать в команду.
+            
+            - reject: поблагодари кандидата, сделать отказ.
+
+    Example for 'pending': 'Привет, [name]! Мы ждём вас на интервью на позицию [position]. До скорой встречи!'
+
+    Answer briefly, without explanation, only in Russian."""
     model = LlamaRun(
-        template="Представь, что ты HR и тебе надо кандидатом",
+        template=template,
         ollama_url="https://useful-kite-settled.ngrok-free.app",
         model_name="llama3.1:8b",
         temperature=0
     )
-    if data['target_action'] == "invite":
-        text = model.run(template.format(name=data['name'],
-                         target_action="пригласить",
-                         position=data['position'],
-                         summary=data['summary'],
-                         description=data['description']),
-                         )
-
-    if data['target_action'] == "reject":
-        text = model.run(dict(name=data['name'],
-                         target_action="отказать",
-                         position=data['position'],
-                         summary=data['summary'],
-                         description=data['description']),
-                         )
-
-    if data['target_action'] == "rotate":
-        text = model.run(dict(name=data['name'],
-                         target_action="предложить другую вакансию",
-                         position=data['position'],
-                         summary=data['summary'],
-                         description=data['description']),
-                         )
+    text = model.run(name=data['name'],
+                     position=data['position'],
+                     target_action=data['target_action'])
 
     return text

@@ -45,8 +45,6 @@ async def process_resume(feedback_request: FeedbackRequest) -> Feedback:
         "target_action": feedback_request.action,
         "name": feedback_request.candidate.name,
         "position": feedback_request.vacancy.position,
-        "summary": feedback_request.candidate.summary,
-        "description": feedback_request.vacancy.description,
     })
 
     print(feedback_request.status)
