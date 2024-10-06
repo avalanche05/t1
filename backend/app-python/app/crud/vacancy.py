@@ -14,7 +14,7 @@ def create(session: Session, vacancy: schemas.VacancyCreate) -> Vacancy:
         team=vacancy.team,
         city=vacancy.city,
         work_format=vacancy.work_format,
-        skills=vacancy.skills
+        skills=[skill.lower().strip() for skill in vacancy.skills]
     )
 
     session.add(db_vacancy)
