@@ -13,6 +13,7 @@ from app import crud, serializers, utils
 from app.api.deps import S3ClientDep, SessionDep, StorageDep
 from app.crud import auth
 from app.models.candidate import Candidate
+from app.models.application import Application
 from app.schemas import FileResult, ResumeProcessSession
 from app.serializers.user import get_user
 
@@ -20,7 +21,7 @@ router = APIRouter()
 
 
 class ResumeProcessorThread(threading.Thread):
-    def __init__(self, session_id: str, files: list[str], db_session, s3_client):
+    def __init__(self, session_id: str, files: list[str], db_session, s3_client, vacancy_id: int | None = None):
         threading.Thread.__init__(self)
         self.session_id = session_id
         self.files = files
@@ -30,6 +31,7 @@ class ResumeProcessorThread(threading.Thread):
         self._db_session = db_session
         self.all_files = copy.copy(files)
         self._s3_client = s3_client
+        self.vacancy_id = vacancy_id
 
         for file_key in files:
             self._files_queue.put(file_key)
@@ -61,8 +63,16 @@ class ResumeProcessorThread(threading.Thread):
                 )
 
                 db_candidate = crud.candidate.create(
-                    self._db_session, candidate, resume_link=resume_link
+                    self._db_session, candidate, resume_link=resume_link, is_cold=bool(self.vacancy_id is None)
                 )
+
+                if self.vacancy_id:
+                    crud.application.create_or_update(self._db_session, Application(
+                        vacancy_id=self.vacancy_id,
+                        candidate_id=db_candidate.id,
+                        status="pending",
+                    ))
+
 
             with self.lock:
                 self._processed_files[file_key] = {
@@ -78,6 +88,7 @@ async def upload_resume(
     s3_client: S3ClientDep,
     storage: StorageDep,
     files: list[UploadFile] = File(...),
+    vacancy_id: int | None = None,
 ) -> ResumeProcessSession:
     succes_files = []
     error_files = []
@@ -102,6 +113,7 @@ async def upload_resume(
         files=succes_files,
         db_session=db_session,
         s3_client=s3_client,
+        vacancy_id=vacancy_id,
     )
 
     resume_processor.start()
