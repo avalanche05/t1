@@ -11,6 +11,7 @@ import { WorkScheduleLabels } from '@/models/IApplicationsFilter';
 import AddToComparisionButton from '../AddToComparisionButton';
 import ChangeApplicationStatusButton from '../ChangeApplicationStatusButton';
 import ChangeVacancyButton from '../ChangeVacancyButton';
+import GenerateFeedbackBlock from '../GenerateFeedbackBlock';
 
 type Props = {
     candidate: Candidate;
@@ -213,26 +214,14 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     </div>
                                 )}
                             </div>
-                            <div className='w-full md:w-1/3 space-y-4'>
-                                <div className='space-y-2'>
-                                    <Button
-                                        onClick={() => {}}
-                                        variant='secondary'
-                                        className='w-full'
-                                    >
-                                        Составить текст для отказа
-                                    </Button>
-                                    <Button onClick={() => {}} variant='default' className='w-full'>
-                                        Составить текст для предложения о работе
-                                    </Button>
+                            {application && application.vacancy && application.vacancy.id && (
+                                <div className='w-full md:w-1/3 space-y-4'>
+                                    <GenerateFeedbackBlock
+                                        candidateId={candidate.id}
+                                        vacancyId={application.vacancy.id}
+                                    />
                                 </div>
-                                <Textarea
-                                    placeholder='Сгенерированный текст появится здесь'
-                                    value={generatedText}
-                                    onChange={(e) => setGeneratedText(e.target.value)}
-                                    rows={4}
-                                />
-                            </div>
+                            )}
                         </div>
                     </CollapsibleContent>
                 </Collapsible>
