@@ -6,7 +6,6 @@ import { RequireUnauth } from './auth/RequireUnauth';
 import { Dashboard } from './components/Dashboard';
 import { Toaster } from './components/ui/toaster';
 import { Pages } from './router/constants';
-import Home from './pages/Home';
 import Applications from './pages/Applications';
 import Vacancies from './pages/Vacancies';
 import Comparision from './pages/Comparision';
@@ -29,73 +28,63 @@ function App() {
                         }
                     />
                     <Route
-                        path={`/${Pages.Home}`}
+                        path={`/${Pages.Applications}`}
                         element={
                             <RequireAuth>
                                 <Dashboard>
-                                    <Home />
+                                    <Applications />
                                 </Dashboard>
                             </RequireAuth>
                         }
                     />
                     <Route
-                        path={`/${Pages.Applications}`}
-                        element={
-                            // <RequireAuth>
-                            <Dashboard>
-                                <Applications />
-                            </Dashboard>
-                            // </RequireAuth>
-                        }
-                    />
-                    <Route
                         path={`/${Pages.Vacancies}`}
                         element={
-                            // <RequireAuth>
-                            <Dashboard>
-                                <Vacancies />
-                            </Dashboard>
-                            // </RequireAuth>
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Vacancies />
+                                </Dashboard>
+                            </RequireAuth>
                         }
                     />
                     <Route
                         path={`/${Pages.Comparision}`}
                         element={
-                            // <RequireAuth>
-                            <Dashboard>
-                                <Comparision />
-                            </Dashboard>
-                            // </RequireAuth>
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Comparision />
+                                </Dashboard>
+                            </RequireAuth>
                         }
                     />
                     <Route
                         path={`/${Pages.Uploader}`}
                         element={
-                            // <RequireAuth>
-                            <Dashboard>
-                                <Uploader />
-                            </Dashboard>
-                            // </RequireAuth>
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Uploader />
+                                </Dashboard>
+                            </RequireAuth>
                         }
                     />
                     <Route
                         path={`/${Pages.Statistics}`}
                         element={
-                            // <RequireAuth>
-                            <Dashboard>
-                                <Statistics />
-                            </Dashboard>
-                            // </RequireAuth>
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Statistics />
+                                </Dashboard>
+                            </RequireAuth>
                         }
                     />
                     <Route
                         path='*'
                         element={
-                            // <RequireAuth>
-                            <Dashboard>
-                                <Applications />
-                            </Dashboard>
-                            // </RequireAuth>
+                            <RequireAuth>
+                                <Dashboard>
+                                    <Applications />
+                                </Dashboard>
+                            </RequireAuth>
                         }
                     />
                 </Routes>
