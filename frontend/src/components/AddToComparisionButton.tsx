@@ -18,13 +18,7 @@ const AddToComparisionButton = observer(({ candidate, application }: Props) => {
             {rootStore.candidatesToCompare.find((c) => c.id === candidate.id) ? (
                 <>
                     <Link to={`/${Pages.Comparision}`}>
-                        <Button
-                            onClick={() => {
-                                rootStore.addCandidateToCompare(candidate, !!application);
-                            }}
-                        >
-                            Сравнить
-                        </Button>
+                        <Button>Сравнить</Button>
                     </Link>
 
                     <Button

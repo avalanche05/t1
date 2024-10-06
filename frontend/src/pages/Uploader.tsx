@@ -179,6 +179,9 @@ const Uploader = observer(() => {
 
                                             <CheckCircle className='h-4 w-4 text-green-500' />
                                         </div>
+
+                                        <div>Имя: {file.candidate.name}</div>
+
                                         <Progress value={100} className='w-full' />
                                         <p className='text-sm text-gray-500 mt-1'>
                                             Статус: Успешно загружен

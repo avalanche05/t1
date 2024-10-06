@@ -1,4 +1,4 @@
-import { Application, ApplicationStatus, Candidate } from '@/api/models';
+import { Application, ApplicationStatus, ApplicationStatusLabels, Candidate } from '@/api/models';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useState } from 'react';
@@ -36,7 +36,11 @@ const CandidateCard = ({ candidate, application }: Props) => {
                         <div className='flex items-center justify-between'>
                             <div className='flex items-center'>
                                 <h2 className='text-2xl font-bold'>{candidate.name}</h2>
-                                {status && <Badge className='ml-2'>{status}</Badge>}
+                                {application?.status && (
+                                    <Badge className='ml-2'>
+                                        {ApplicationStatusLabels[application.status]}
+                                    </Badge>
+                                )}
                             </div>
 
                             <CollapsibleTrigger asChild>
@@ -211,7 +215,9 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                                                     : 'bg-gray-300'
                                                             }`}
                                                         ></div>
-                                                        <p className='mt-1'>{step}</p>
+                                                        <p className='mt-1'>
+                                                            {ApplicationStatusLabels[step]}
+                                                        </p>
                                                     </div>
                                                 ))}
                                             </div>
