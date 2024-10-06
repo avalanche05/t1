@@ -50,7 +50,7 @@ def create(
         phone=candidate["phone"],
         email=candidate["email"],
         contacts=candidate["contacts"],
-        skills=candidate["skills"],
+        skills=[skill.lower().strip() for skill in candidate["skills"]],
         experience=candidate["experience"],
         position=candidate["position"],
         grade=candidate["grade"],
