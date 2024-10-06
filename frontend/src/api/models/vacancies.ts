@@ -7,6 +7,8 @@ export interface Vacancy {
     speciality: string;
     description: string;
     team: string;
+    city: string;
+    work_format: WorkSchedule;
     createdAt: string;
 }
 
