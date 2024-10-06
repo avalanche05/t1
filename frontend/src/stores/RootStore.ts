@@ -20,6 +20,7 @@ export class RootStore {
     isApplicationsLoading = false;
     applicationsFilter: IApplicationsFilter = defaultApplicationsFilter;
     filteredApplications: Application[] = [];
+    useRanking: boolean = false;
 
     vacancyColdCandidates: Candidate[] = [];
     isVacancyColdCandidatesLoading = false;
@@ -53,8 +54,18 @@ export class RootStore {
         this.fetchVacancies(filter);
     }
 
-    filterApplications() {
+    setUseRanking(value: boolean) {
+        this.useRanking = value;
+    }
+
+    async filterApplications() {
         this.filteredApplications = this.applications;
+
+        if (this.applicationsFilter.vacancyId && this.useRanking) {
+            await this.fetchApplications(this.applicationsFilter.vacancyId, this.useRanking);
+        } else {
+            await this.fetchApplications();
+        }
 
         if (this.applicationsFilter.name) {
             this.filterApplicationsByCandidateProperty('name', 'name');
@@ -207,10 +218,10 @@ export class RootStore {
         );
     }
 
-    async fetchApplications() {
+    async fetchApplications(vacancyId?: number, is_ranked?: boolean) {
         this.isApplicationsLoading = true;
 
-        return ApplicationsApiService.fetchApplications({})
+        return ApplicationsApiService.fetchApplications({ vacancyId, is_ranked })
             .then((applications) => {
                 this.applications = applications;
                 this.filteredApplications = applications;

@@ -15,6 +15,8 @@ import { Grade, GradeLabels, WorkSchedule, WorkScheduleLabels } from '@/models/I
 import { useStores } from '@/hooks/useStores';
 import Folders from './Folders';
 import { observer } from 'mobx-react-lite';
+import { Switch } from './ui/switch';
+import { Label } from './ui/label';
 
 const ApplicationsFilter = observer(() => {
     const { rootStore } = useStores();
@@ -172,6 +174,15 @@ const ApplicationsFilter = observer(() => {
                             value={formData.city}
                             onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                         />
+                    </div>
+
+                    <div className='flex items-center space-x-2'>
+                        <Switch
+                            checked={rootStore.useRanking}
+                            onCheckedChange={(value) => rootStore.setUseRanking(value)}
+                            id='airplane-mode'
+                        />
+                        <Label htmlFor='airplane-mode'>Отранжировать кандидатов</Label>
                     </div>
 
                     <div className='flex space-x-2'>
