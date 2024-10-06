@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/colla
 import { ChevronsUpDown } from 'lucide-react';
 import AddCandidateToFolderButton from '../AddCandidateToFolderButton';
 import { WorkScheduleLabels } from '@/models/IApplicationsFilter';
+import AddToComparisionButton from '../AddToComparisionButton';
 
 type Props = {
     candidate: Candidate;
@@ -44,7 +45,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
     ];
 
     return (
-        <Card className='w-full'>
+        <Card className='w-full mt-6'>
             <CardContent className='p-6'>
                 <Collapsible open={isOpen} onOpenChange={setIsOpen} className='space-y-2'>
                     <div className='cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
@@ -64,7 +65,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
 
                         <div className='flex flex-col md:flex-row gap-6'>
                             <div className='w-full md:w-2/3 space-y-4'>
-                                <div className='grid grid-cols-3 gap-4'>
+                                <div className='grid md:grid-cols-3 gap-4'>
                                     <div>
                                         <p className='text-sm font-medium'>Опыт:</p>
                                         <p>{candidate.experience} лет</p>
@@ -170,6 +171,11 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     </Dialog>
 
                                     <AddCandidateToFolderButton candidateId={candidate.id} />
+
+                                    <AddToComparisionButton
+                                        candidate={candidate}
+                                        application={application}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -178,7 +184,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                     <CollapsibleContent className='space-y-2'>
                         <div className='flex flex-col md:flex-row gap-6 mt-5'>
                             <div className='w-full md:w-2/3 space-y-4'>
-                                <div className='grid grid-cols-3 gap-4'>
+                                <div className='grid md:grid-cols-3 gap-4'>
                                     <div>
                                         <p className='text-sm font-medium'>Телефон:</p>
                                         <p>{candidate.phone}</p>
@@ -195,7 +201,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
                                     </div>
                                 </div>
 
-                                <div className='grid grid-cols-3 gap-4'>
+                                <div className='grid md:grid-cols-3 gap-4'>
                                     <div>
                                         <p className='text-sm font-medium'>Город:</p>
                                         <p>{candidate.city}</p>

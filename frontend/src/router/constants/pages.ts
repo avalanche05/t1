@@ -3,4 +3,8 @@ export enum Pages {
     Signup = 'signup',
     Home = 'home',
     Applications = 'applications',
+    Vacancies = 'vacancies',
+    Comparision = 'comparision',
+    Uploader = 'uploader',
+    Statistics = 'statistics',
 }

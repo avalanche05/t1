@@ -1,7 +1,15 @@
 import ApplicationsApiService from '@/api/ApplicationsApiService';
 import FoldersApiService from '@/api/FoldersApiService';
-import { Application, Candidate, Folder } from '@/api/models';
+import {
+    Application,
+    Candidate,
+    CreateVacancyParams,
+    FetchVacancyParams,
+    Folder,
+    Vacancy,
+} from '@/api/models';
 import VacanciesApiService from '@/api/VacanciesApiService';
+import { CandidateToCompare } from '@/models/CandidateToCompare';
 import { defaultApplicationsFilter, IApplicationsFilter } from '@/models/IApplicationsFilter';
 import { makeAutoObservable } from 'mobx';
 
@@ -17,6 +25,11 @@ export class RootStore {
     folders: Folder[] = [];
     isFoldersLoading = false;
     activeFolderId: number | null = null;
+
+    vacancies: Vacancy[] = [];
+    isVacanciesLoading = false;
+
+    candidatesToCompare: CandidateToCompare[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -108,6 +121,20 @@ export class RootStore {
         this.filterApplications();
     }
 
+    addCandidateToCompare(candidate: Candidate, hasApplication: boolean) {
+        if (this.candidatesToCompare.length >= 3) {
+            this.candidatesToCompare.shift();
+        }
+
+        this.candidatesToCompare.push({ id: candidate.id, candidate, hasApplication });
+    }
+
+    removeCandidateToCompare(candidateId: number) {
+        this.candidatesToCompare = this.candidatesToCompare.filter(
+            (candidate) => candidate.id !== candidateId
+        );
+    }
+
     async fetchApplications() {
         this.isApplicationsLoading = true;
 
@@ -169,5 +196,25 @@ export class RootStore {
                 }
             }
         );
+    }
+
+    async createVacancy(params: CreateVacancyParams) {
+        return VacanciesApiService.createVacancy(params).then(() => {
+            this.fetchVacancies({});
+        });
+    }
+
+    async fetchVacancies(params: FetchVacancyParams) {
+        this.isVacanciesLoading = true;
+
+        return VacanciesApiService.fetchVacancies(params)
+            .then((vacancies) => {
+                this.vacancies = vacancies;
+
+                return vacancies;
+            })
+            .finally(() => {
+                this.isVacanciesLoading = false;
+            });
     }
 }

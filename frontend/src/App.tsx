@@ -8,6 +8,10 @@ import { Toaster } from './components/ui/toaster';
 import { Pages } from './router/constants';
 import Home from './pages/Home';
 import Applications from './pages/Applications';
+import Vacancies from './pages/Vacancies';
+import Comparision from './pages/Comparision';
+import Uploader from './pages/Uploader';
+import Statistics from './pages/Statistics';
 
 function App() {
     return (
@@ -35,7 +39,7 @@ function App() {
                         }
                     />
                     <Route
-                        path={`/`}
+                        path={`/${Pages.Applications}`}
                         element={
                             // <RequireAuth>
                             <Dashboard>
@@ -45,13 +49,53 @@ function App() {
                         }
                     />
                     <Route
+                        path={`/${Pages.Vacancies}`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Vacancies />
+                            </Dashboard>
+                            // </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Comparision}`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Comparision />
+                            </Dashboard>
+                            // </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Uploader}`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Uploader />
+                            </Dashboard>
+                            // </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path={`/${Pages.Statistics}`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Statistics />
+                            </Dashboard>
+                            // </RequireAuth>
+                        }
+                    />
+                    <Route
                         path='*'
                         element={
-                            <RequireAuth>
-                                <Dashboard>
-                                    <Home />
-                                </Dashboard>
-                            </RequireAuth>
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Applications />
+                            </Dashboard>
+                            // </RequireAuth>
                         }
                     />
                 </Routes>
