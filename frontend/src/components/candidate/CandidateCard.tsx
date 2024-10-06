@@ -45,7 +45,7 @@ const CandidateCard = ({ candidate, application }: Props) => {
     ];
 
     return (
-        <Card className='w-full'>
+        <Card className='w-full mt-6'>
             <CardContent className='p-6'>
                 <Collapsible open={isOpen} onOpenChange={setIsOpen} className='space-y-2'>
                     <div className='cursor-pointer' onClick={() => setIsOpen(!isOpen)}>

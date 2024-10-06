@@ -28,7 +28,7 @@ const Comparision = observer(() => {
 
     return (
         <div>
-            <h3 className='font-semibold text-lg md:text-xl'>Вакансия</h3>
+            <h3 className='font-semibold text-lg md:text-2xl'>Вакансия</h3>
 
             {rootStore.vacancies && (
                 <>

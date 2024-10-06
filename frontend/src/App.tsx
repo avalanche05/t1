@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Applications from './pages/Applications';
 import Vacancies from './pages/Vacancies';
 import Comparision from './pages/Comparision';
+import Uploader from './pages/Uploader';
 
 function App() {
     return (
@@ -67,13 +68,23 @@ function App() {
                         }
                     />
                     <Route
+                        path={`/${Pages.Uploader}`}
+                        element={
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Uploader />
+                            </Dashboard>
+                            // </RequireAuth>
+                        }
+                    />
+                    <Route
                         path='*'
                         element={
-                            <RequireAuth>
-                                <Dashboard>
-                                    <Home />
-                                </Dashboard>
-                            </RequireAuth>
+                            // <RequireAuth>
+                            <Dashboard>
+                                <Applications />
+                            </Dashboard>
+                            // </RequireAuth>
                         }
                     />
                 </Routes>
