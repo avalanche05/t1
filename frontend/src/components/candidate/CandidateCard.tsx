@@ -3,7 +3,6 @@ import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useState } from 'react';
 import { Card, CardContent } from '../ui/card';
-import { Textarea } from '../ui/textarea';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { ChevronsUpDown } from 'lucide-react';
 import AddCandidateToFolderButton from '../AddCandidateToFolderButton';
@@ -19,7 +18,6 @@ type Props = {
 };
 
 const CandidateCard = ({ candidate, application }: Props) => {
-    const [generatedText, setGeneratedText] = useState('');
     const [isOpen, setIsOpen] = useState(false);
 
     const statusOrder = [
