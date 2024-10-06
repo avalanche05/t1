@@ -8,6 +8,7 @@ export interface Vacancy {
     description: string;
     team: string;
     city: string;
+    skills: string[];
     work_format: WorkSchedule;
     createdAt: string;
 }
@@ -24,6 +25,7 @@ export interface CreateVacancyParams {
     team: string;
     city: string;
     work_format: WorkSchedule;
+    skills: string[];
 }
 
 export interface FetchVacancyParams {

@@ -23,6 +23,7 @@ const VacanciesFilter = observer(() => {
         speciality: '',
         city: '',
         work_format: '',
+        skills: '',
     });
 
     // Обработчик выбора для select полей
@@ -40,6 +41,7 @@ const VacanciesFilter = observer(() => {
             speciality: formData.speciality || null,
             city: formData.city || null,
             work_format: (formData.work_format as WorkSchedule) || null,
+            skills: formData.skills || null,
         });
     };
 
@@ -76,6 +78,14 @@ const VacanciesFilter = observer(() => {
                     </div>
 
                     <div className='flex space-x-2'>
+                        <Input
+                            placeholder='Навыки'
+                            className='flex-1'
+                            name='city'
+                            value={formData.skills}
+                            onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                        />
+
                         <Select value={formData.grade} onValueChange={handleSelectChange('grade')}>
                             <SelectTrigger className='flex-1'>
                                 <SelectValue placeholder='Грейд' />
@@ -118,6 +128,7 @@ const VacanciesFilter = observer(() => {
                                     position: '',
                                     speciality: '',
                                     work_format: '',
+                                    skills: '',
                                 })
                             }
                         >

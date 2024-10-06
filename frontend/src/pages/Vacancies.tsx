@@ -25,6 +25,7 @@ import { useStores } from '@/hooks/useStores';
 import { Grade, GradeLabels, WorkSchedule, WorkScheduleLabels } from '@/models/IApplicationsFilter';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
+import { Tag, TagInput } from 'emblor';
 
 const Vacancies = observer(() => {
     const { rootStore } = useStores();
@@ -38,6 +39,8 @@ const Vacancies = observer(() => {
     const [team, setTeam] = useState('');
     const [city, setCity] = useState('');
     const [workFormat, setWorkFormat] = useState<WorkSchedule | null>(null);
+    const [tags, setTags] = useState<Tag[]>([]);
+    const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
 
     useEffect(() => {
         rootStore.fetchVacancies({}).catch(() => {
@@ -61,6 +64,7 @@ const Vacancies = observer(() => {
                 team,
                 city,
                 work_format: workFormat ?? WorkSchedule.FullDay,
+                skills: tags.map((tag) => tag.text),
             })
             .then(() => {
                 setPosition('');
@@ -101,7 +105,10 @@ const Vacancies = observer(() => {
                             <DialogTitle>Создание вакансии</DialogTitle>
                         </DialogHeader>
 
-                        <form onSubmit={handleEditOrganizationSubmit}>
+                        <form
+                            className='create-vacancy overflow-y-scroll'
+                            onSubmit={handleEditOrganizationSubmit}
+                        >
                             <div className='grid gap-4 py-4'>
                                 <div>
                                     <Label htmlFor='city' className='text-right'>
@@ -167,6 +174,24 @@ const Vacancies = observer(() => {
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                </div>
+
+                                <div>
+                                    <Label htmlFor='team' className='text-right'>
+                                        Требуемые навыки
+                                    </Label>
+
+                                    <div className='tag-input'>
+                                        <TagInput
+                                            placeholder='Введите навыки'
+                                            tags={tags}
+                                            setTags={(newTags) => {
+                                                setTags(newTags);
+                                            }}
+                                            activeTagIndex={activeTagIndex}
+                                            setActiveTagIndex={setActiveTagIndex}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div>

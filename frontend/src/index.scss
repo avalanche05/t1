@@ -86,3 +86,12 @@
 header {
     z-index: 999;
 }
+
+.tag-input span {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.create-vacancy {
+    max-height: calc(100vh - 200px);
+}

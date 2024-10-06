@@ -9,11 +9,11 @@ import { toast } from './ui/use-toast';
 import { ApplicationStatus, ApplicationStatusLabels } from '@/api/models';
 
 type Props = {
-    candidateId: number;
+    applicationId: number;
     currentStatus: ApplicationStatus;
 };
 
-const ChangeApplicationStatusButton = ({ candidateId, currentStatus }: Props) => {
+const ChangeApplicationStatusButton = ({ applicationId, currentStatus }: Props) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<ApplicationStatus | null>(null);
@@ -28,7 +28,7 @@ const ChangeApplicationStatusButton = ({ candidateId, currentStatus }: Props) =>
         setLoading(true);
 
         rootStore
-            .changeApplicationStatus(candidateId, status)
+            .changeApplicationStatus(applicationId, status)
             .catch(() => {
                 toast({
                     title: 'Ошибка',
