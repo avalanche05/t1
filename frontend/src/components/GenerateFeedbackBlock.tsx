@@ -27,7 +27,7 @@ const GenerateFeedbackBlock = ({ vacancyId, candidateId }: Props) => {
                     onClick={() => {
                         setIsApproveLoading(true);
 
-                        GenerateFeedbackApiServie.fetchRejectFeedback({
+                        GenerateFeedbackApiServie.fetchApproveFeedback({
                             candidateId,
                             vacancyId,
                         })
@@ -51,7 +51,7 @@ const GenerateFeedbackBlock = ({ vacancyId, candidateId }: Props) => {
                     onClick={() => {
                         setIsRejectLoading(true);
 
-                        GenerateFeedbackApiServie.fetchApproveFeedback({
+                        GenerateFeedbackApiServie.fetchRejectFeedback({
                             candidateId,
                             vacancyId,
                         })
