@@ -16,3 +16,9 @@ class ResumeProcessSession(BaseSchema):
     processing: list[FileResult]
     success: list[FileResult]
     error: list[FileResult]
+
+
+class VoiceProcessSession(BaseSchema):
+    session_id: str
+    is_finished: bool
+    message: str | None = ""

@@ -14,7 +14,7 @@ from app.api.deps import S3ClientDep, SessionDep, StorageDep, CurrentUser
 from app.crud import auth
 from app.models.application import Application
 from app.models.candidate import Candidate
-from app.schemas import FileResult, ResumeProcessSession
+from app.schemas import FileResult, ResumeProcessSession, VoiceProcessSession
 from app.serializers.user import get_user
 
 router = APIRouter()
@@ -190,4 +190,55 @@ async def get_resume_process_session(storage: StorageDep, db_user: CurrentUser, 
         processing=processing,
         success=success,
         error=error,
+    )
+
+
+
+
+@router.post("/voice")
+async def upload_resume_voice(
+    s3_client: S3ClientDep,
+    db_user: CurrentUser,
+    file: UploadFile = File(...),
+) -> VoiceProcessSession:
+    assert str(file.filename).endswith(".mp3")
+    file_key = str(uuid4()) + "~!~" + file.filename
+    file_content = await file.read()
+    utils.s3.upload_file(
+        s3_client=s3_client,
+        file_key=file_key,
+        file_content=file_content,
+        file_type=file.content_type,
+    )
+
+    session_id = str(uuid4())
+
+    response = requests.post("http://51.250.25.30:5001/interview/analyze/" + session_id,
+                  json={
+                      "file_key": file_key,
+                      "position": "сотрудник",
+                  })
+    
+    response.raise_for_status()
+    data = response.json()
+    return VoiceProcessSession(
+        session_id=session_id,
+        is_finished=data["is_finished"],
+        message=data["message"],
+    )
+
+
+@router.get("/voice/{session_id}")
+async def voice_session(
+    session_id: str,
+    db_user: CurrentUser,
+) -> VoiceProcessSession:
+    response = requests.get("http://51.250.25.30:5001/interview/analyze/" + session_id)
+    
+    response.raise_for_status()
+    data = response.json()
+    return VoiceProcessSession(
+        session_id=session_id,
+        is_finished=data["is_finished"],
+        message=data["message"],
     )
