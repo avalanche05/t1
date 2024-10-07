@@ -1,5 +1,5 @@
 import { get, post } from './http';
-import { ResumeUploadResponse } from './models';
+import { InterviewUploadResponse, ResumeUploadResponse } from './models';
 
 class ResumeUploadApiService {
     public async uploadFiles(
@@ -27,6 +27,27 @@ class ResumeUploadApiService {
 
     public async fetchUploadStatus(sessionId: string): Promise<ResumeUploadResponse> {
         const response = await get<ResumeUploadResponse>(`/api/v1/resumes/${sessionId}`);
+
+        return response;
+    }
+
+    public async uploadInterview(file: File): Promise<InterviewUploadResponse> {
+        const formData = new FormData();
+
+        formData.append('file', file);
+
+        const response = await post<InterviewUploadResponse>(`/api/v1/resumes/voice`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            timeout: 510000,
+        });
+
+        return response;
+    }
+
+    public async fetchInterviewStatus(sessionId: string): Promise<InterviewUploadResponse> {
+        const response = await get<InterviewUploadResponse>(`/api/v1/resumes/voice/${sessionId}`);
 
         return response;
     }

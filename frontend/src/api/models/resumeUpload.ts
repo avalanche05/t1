@@ -13,3 +13,9 @@ export interface UploadFile {
     message: string;
     candidate: Candidate;
 }
+
+export interface InterviewUploadResponse {
+    session_id: string;
+    is_finished: boolean;
+    message: string;
+}

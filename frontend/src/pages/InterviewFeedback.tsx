@@ -1,6 +1,7 @@
-import { ResumeUploadResponse } from '@/api/models';
+import { InterviewUploadResponse } from '@/api/models';
 import ResumeUploadApiService from '@/api/ResumeUploadApiService';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -8,37 +9,40 @@ import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 
 const InterviewFeedback = observer(() => {
-    const [uploadResponse, setUploadResponse] = useState<ResumeUploadResponse | null>(null);
+    const [uploadResponse, setUploadResponse] = useState<InterviewUploadResponse | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);
+    const [file, setFile] = useState<File | null>(null);
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fileList = event.target.files;
-
-        if (fileList) {
-            setFiles(Array.from(fileList));
+        const { files } = event.target;
+        if (files) {
+            setFile(files[0]);
         }
     };
 
     const uploadFiles = () => {
-        setIsUploading(true);
+        console.log(file);
 
-        ResumeUploadApiService.uploadFiles(files, undefined)
-            .then((response) => {
-                startPolling(response.session_id);
-            })
-            .catch(() => {
-                toast({
-                    title: 'Ошибка',
-                    description: 'Не удалось загрузить файлы',
-                    variant: 'destructive',
+        if (file) {
+            setIsUploading(true);
+
+            ResumeUploadApiService.uploadInterview(file)
+                .then((response) => {
+                    startPolling(response.session_id);
+                })
+                .catch(() => {
+                    toast({
+                        title: 'Ошибка',
+                        description: 'Не удалось загрузить файлы',
+                        variant: 'destructive',
+                    });
                 });
-            });
+        }
     };
 
     const startPolling = (sessionId: string) => {
         const interval = setInterval(() => {
-            ResumeUploadApiService.fetchUploadStatus(sessionId)
+            ResumeUploadApiService.fetchInterviewStatus(sessionId)
                 .then((response) => {
                     setUploadResponse(response);
 
@@ -51,18 +55,6 @@ const InterviewFeedback = observer(() => {
                     clearInterval(interval);
                     setIsUploading(false);
 
-                    setUploadResponse((prev) => {
-                        if (!prev) {
-                            return null;
-                        }
-
-                        return {
-                            ...prev,
-                            error: prev?.error.concat(prev.processing) || [],
-                            processing: [],
-                        };
-                    });
-
                     toast({
                         title: 'Ошибка',
                         description: 'Не удалось загрузить файлы',
@@ -74,37 +66,57 @@ const InterviewFeedback = observer(() => {
 
     return (
         <div>
-            <h1 className='font-semibold text-lg md:text-2xl mb-4'>Загрузить резюме</h1>
+            <h1 className='font-semibold text-lg md:text-2xl mb-4'>
+                Загрузить запись собеседования
+            </h1>
 
             <p>
-                Загрузите файлы с резюме кандидатов, чтобы начать их обработку. Если выбрать
-                вакансию, то создастся отклик на эту вакансию.
+                Загрузите .mp3 файл с записью собеседования и нажмите на кнопку "Обработать". После
+                обработки вы получите краткие заметки о собеседовании и пример фидбека кандидату.
             </p>
 
             <div className='mb-4 mt-4'>
                 <div className='flex gap-4'>
                     <Input
                         type='file'
-                        accept='.pdf'
-                        multiple
+                        accept='.mp3'
                         onChange={handleFileUpload}
                         disabled={isUploading}
                         className='mb-2 cursor-pointer w-1/2'
                     />
                 </div>
 
-                <Button disabled={isUploading || files.length === 0} onClick={uploadFiles}>
+                <Button disabled={isUploading || file == null} onClick={uploadFiles}>
                     {isUploading ? (
                         <>
                             <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                             Загрузка...
                         </>
                     ) : (
-                        'Загрузить резюме'
+                        'Обработать запись .mp3'
                     )}
                 </Button>
             </div>
-            <div className='space-y-4'>{uploadResponse && <></>}</div>
+            <div className='space-y-4'>
+                {uploadResponse && uploadResponse.is_finished && (
+                    <>
+                        <Card>
+                            <CardTitle></CardTitle>
+                            <CardContent>
+                                <h2 className='font-semibold text-lg md:text-2xl mb-4 pt-4'>
+                                    Результаты обработки
+                                </h2>
+                                <div>
+                                    <h3 className='font-semibold text-lg md:text-xl mb-2'>
+                                        Заметки о собеседовании
+                                    </h3>
+                                    <p>{uploadResponse.message}</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </>
+                )}
+            </div>
         </div>
     );
 });
