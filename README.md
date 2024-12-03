@@ -6,7 +6,7 @@
 
 ## [Ссылка на доску со статистикой](http://misis.tech:3001/d/de025514pmfb4f/statistika-rekrutjorov?orgId=1)
 
-## [Скринкаст работы сервиса](https://youtu.be/YAmg0lAuX5w)
+## [Скринкаст работы сервиса](https://disk.yandex.ru/i/DN3oFRI3QCiptA)
 
 ### Основные функции
  - Загрузка и распознавание PDF-файлов с резюме и откликами
